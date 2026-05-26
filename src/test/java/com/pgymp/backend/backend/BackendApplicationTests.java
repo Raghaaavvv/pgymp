@@ -1,4 +1,4 @@
-package com.pgymp.backend;
+package com.pgymp.backend.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
