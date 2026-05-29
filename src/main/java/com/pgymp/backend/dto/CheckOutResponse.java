@@ -1,12 +1,14 @@
 package com.pgymp.backend.dto;
 
-public class RegisterResponse {
+public class CheckOutResponse {
     private boolean status;
     private String message;
+    private Long id;
 
-    public RegisterResponse(boolean status, String message) {
+    public CheckOutResponse(boolean status, String message, Long id) {
         this.status = status;
         this.message = message;
+        this.id = id;
     }
 
     public boolean isStatus() {
@@ -15,5 +17,9 @@ public class RegisterResponse {
 
     public String getMessage() {
         return this.message;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 }

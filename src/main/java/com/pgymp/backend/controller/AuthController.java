@@ -1,9 +1,6 @@
 package com.pgymp.backend.controller;
 
-import com.pgymp.backend.dto.LoginRequest;
-import com.pgymp.backend.dto.LoginResponse;
-import com.pgymp.backend.dto.RegisterRequest;
-import com.pgymp.backend.dto.RegisterResponse;
+import com.pgymp.backend.dto.*;
 import com.pgymp.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +23,10 @@ public class AuthController {
         return userService.register(request.getUsername(), request.getPassword());
     }
 
+    @PostMapping("/checkOut")
+    public CheckOutResponse checkOut(@RequestBody CheckOutRequest request) {
+        return userService.checkOut(request.getUserId());
+    }
 
 
 }

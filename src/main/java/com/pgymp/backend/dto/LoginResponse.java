@@ -11,7 +11,7 @@ public class LoginResponse {
         this.id = id;
     }
 
-    public boolean getStatus() {
+    public boolean isStatus() {
         return this.status;
     }
 

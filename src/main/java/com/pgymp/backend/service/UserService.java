@@ -1,5 +1,6 @@
 package com.pgymp.backend.service;
 
+import com.pgymp.backend.dto.CheckOutResponse;
 import com.pgymp.backend.dto.LoginResponse;
 import com.pgymp.backend.dto.RegisterResponse;
 import com.pgymp.backend.model.User;
@@ -40,6 +41,21 @@ public class UserService {
         User user = new User(username, password);
         userRepository.save(user);
         return new RegisterResponse(true, "Registration successful");
+
+    }
+
+    public CheckOutResponse checkOut(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return new CheckOutResponse(false, "invalid", null);
+        }
+        User user = userOpt.get();
+        if (!user.isCheckedIn()) {
+            return new CheckOutResponse(false, "User already checked out.", null);
+        }
+        user.setCheckedIn(false);
+        userRepository.save(user);
+        return new CheckOutResponse(true, "Check Out successful", userId);
 
     }
 }
