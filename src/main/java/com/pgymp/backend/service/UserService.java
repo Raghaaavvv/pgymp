@@ -1,5 +1,7 @@
 package com.pgymp.backend.service;
 
+import com.pgymp.backend.dto.LoginResponse;
+import com.pgymp.backend.dto.RegisterResponse;
 import com.pgymp.backend.model.User;
 import com.pgymp.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +17,29 @@ public class UserService {
     public LoginResponse login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (!userOpt.isPresent()) {
-            // return login invalid -> need to register
+            return new LoginResponse(false, "User not found - please register", null);
         }
         User user = userOpt.get();
         if (!user.getPassword().equals(password)) {
-            // return login invalid -> wrong password
+            return new LoginResponse(false, "Wrong Password", null);
+
         }
         if (user.isCheckedIn()) {
-            // return login invalid -> user already checked in
+            return new LoginResponse(false, "User already checked in", null);
         }
         user.setCheckedIn(true);
         userRepository.save(user);
-        // return login success
+        return new LoginResponse(true, "Login successful", user.getId());
     }
 
     public RegisterResponse register(String username, String password) {
         if (userRepository.existsByUsername(username)) {
-            // return register invalid, username already exists!
+            return new RegisterResponse(false, "Username already exists");
+
         }
         User user = new User(username, password);
         userRepository.save(user);
-        // return register success
+        return new RegisterResponse(true, "Registration successful");
 
     }
 }

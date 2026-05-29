@@ -71,6 +71,10 @@ public class User {
         return "Checked out";
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
 
 
 
