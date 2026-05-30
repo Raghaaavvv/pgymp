@@ -91,20 +91,20 @@ historically busy periods — all from a single platform.
 │                  (Render / Local)                    │
 │                                                      │
 │                   users table                        │
-│     id | username | password | checked_in            │
+│     id | matricId | password | checked_in            │
 └─────────────────────────────────────────────────────┘
 
 ### API Endpoints
 | Method | Endpoint | Description | Request Body |
 |--------|----------|-------------|--------------|
-| POST | `/api/auth/register` | Register new user | `{ username, password }` |
-| POST | `/api/auth/login` | Login and check in | `{ username, password }` |
+| POST | `/api/auth/register` | Register new user | `{ matricId, password }` |
+| POST | `/api/auth/login` | Login and check in | `{ matricId, password }` |
 | POST | `/api/auth/checkOut` | Check out user | `{ userId }` |
 
 ### Database Schema
 users
 ├── id (BIGSERIAL, PRIMARY KEY)
-├── username (VARCHAR, NOT NULL, UNIQUE)
+├── matricId (VARCHAR, NOT NULL, UNIQUE)
 ├── password (VARCHAR, NOT NULL)
 └── checked_in (BOOLEAN, DEFAULT false)
 
@@ -177,7 +177,7 @@ ensuring code review before integration and preventing conflicts.
 ### Testing Strategy
 Unit tests cover individual components and integration tests cover API endpoints.
 Comprehensive exception handling addresses edge cases like double check-ins,
-invalid credentials, and duplicate usernames.
+invalid credentials, and duplicate matricIds.
 
 ---
 
@@ -202,12 +202,12 @@ invalid credentials, and duplicate usernames.
 ### Backend Setup
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/pgymp-backend.git
+git clone https://github.com/YOUR_matricId/pgymp-backend.git
 cd pgymp-backend
 
 # Configure database in src/main/resources/application.properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/pgymp_db
-spring.datasource.username=postgres
+spring.datasource.matricId=postgres
 spring.datasource.password=YOUR_PASSWORD
 
 # Run the application
@@ -217,7 +217,7 @@ spring.datasource.password=YOUR_PASSWORD
 ### Frontend Setup
 ```bash
 # Clone the frontend repository
-git clone https://github.com/YOUR_USERNAME/pgymp-frontend.git
+git clone https://github.com/YOUR_matricId/pgymp-frontend.git
 cd pgymp-frontend
 
 # Install dependencies

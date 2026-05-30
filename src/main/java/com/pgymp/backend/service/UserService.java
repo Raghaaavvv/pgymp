@@ -15,8 +15,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public LoginResponse login(String username, String password) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
+    public LoginResponse login(String matricId, String password) {
+        Optional<User> userOpt = userRepository.findBymatricId(matricId);
         if (!userOpt.isPresent()) {
             return new LoginResponse(false, "User not found - please register", null);
         }
@@ -33,12 +33,12 @@ public class UserService {
         return new LoginResponse(true, "Login successful", user.getId());
     }
 
-    public RegisterResponse register(String username, String password) {
-        if (userRepository.existsByUsername(username)) {
-            return new RegisterResponse(false, "Username already exists");
+    public RegisterResponse register(String matricId, String password) {
+        if (userRepository.existsBymatricId(matricId)) {
+            return new RegisterResponse(false, "matricId already exists");
 
         }
-        User user = new User(username, password);
+        User user = new User(matricId, password);
         userRepository.save(user);
         return new RegisterResponse(true, "Registration successful");
 

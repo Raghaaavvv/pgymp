@@ -13,7 +13,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String matricId;
 
     @Column(nullable = false)
     private String password;
@@ -24,8 +24,8 @@ public class User {
     @Column
     private LocalDateTime lastCheckedIn;
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String matricId, String password) {
+        this.matricId = matricId;
         this.password = password;
         this.checkedIn = false;
 
@@ -35,16 +35,16 @@ public class User {
 
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getMatricId() {
+        return this.matricId;
     }
 
     public String getPassword() {
         return this.password;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setMatricId(String matricId) {
+        this.matricId = matricId;
     }
 
     public void setPassword(String password) {

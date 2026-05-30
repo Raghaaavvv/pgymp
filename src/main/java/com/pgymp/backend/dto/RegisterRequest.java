@@ -1,13 +1,13 @@
 package com.pgymp.backend.dto;
 
 public class RegisterRequest {
-    private String username;
+    private String matricId;
     private String password;
 
     public RegisterRequest() {}
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setmatricId(String matricId) {
+        this.matricId = matricId;
     }
 
     public void setPassword(String password) {
@@ -18,8 +18,8 @@ public class RegisterRequest {
         return this.password;
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getmatricId() {
+        return this.matricId;
     }
 }
 
