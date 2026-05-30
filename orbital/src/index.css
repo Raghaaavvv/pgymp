@@ -1,0 +1,157 @@
+
+
+header ul {
+  display: flex;           
+  justify-content: center;
+  gap: 30px;              
+  list-style-type: none; 
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+header h1 {
+  text-align: center;
+  color: rgb(60, 153, 128); 
+  font-family: 'Arial', sans-serif;
+  margin-bottom: 10px;
+}
+
+header li a {
+  text-decoration: none;   
+  color: rgb(58, 103, 143);
+  font-size: 18px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+  font-family: 'Arial', sans-serif;
+}
+
+header li a:hover {
+  color: rgb(60, 153, 128); 
+}
+
+.card-container {
+  display: flex;
+  justify-content: center; 
+  align-items: flex-start; 
+  width: 100%;             
+  margin-top: 20px;        
+}
+
+.card1 {
+  border: 1px solid rgb(224, 223, 223);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+  max-width: 250px;
+  display: inline-block;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1); 
+  background-color: white;
+}
+
+.card1 .card-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.card1 .card-title {
+  font-family: 'Arial', sans-serif;
+  font-size: 22px;
+  margin: 0;
+  color: rgb(60, 153, 128); 
+}
+
+.card1 .card-text {
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  color: rgb(90, 158, 197);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center; /* This pushes the button to the middle */
+  width: 100%;             /* Ensures the container spans the whole page */
+  margin-top: 20px;
+  margin-bottom: 40px; 
+}
+
+
+.login-btn {
+  background-color: rgb(60, 153, 128); /* Theme green */
+  color: white;
+  border: none;
+  border-radius: 25px; 
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-btn:hover {
+  background-color: rgb(46, 122, 102); 
+  transform: translateY(-2px);         
+}
+
+.login-btn:active {
+  transform: translateY(0);           
+}
+
+
+.equipment-list {
+  list-style-type: none; 
+  padding: 60px;           
+  text-align: center;    
+  font-weight: bold;
+  line-height: 1.8;
+}
+
+.low-quantity {
+  color: #d9534f; 
+}
+
+.high-quantity {
+  color: rgb(60, 153, 128); 
+}
+/* --- SUCCESS & QR CODE STYLING --- */
+.success-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 30px;
+  gap: 10px; /* Creates clean, even spacing between text and the QR code */
+}
+
+.qr-wrapper {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15); /* Deep, soft shadow to make it pop */
+  margin: 20px 0;
+  border: 1px solid rgb(224, 223, 223);
+}
+
+.checkout-btn {
+  background-color: #d9534f; /* Distinct red for a destructive/logout action */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 40px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.checkout-btn:hover {
+  background-color: #c9302c;
+  transform: translateY(-2px);
+}
