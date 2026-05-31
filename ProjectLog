@@ -1,5 +1,35 @@
-Project Log.md
+Project Log
+This log documents the individual tasks, timelines, and hours contributed by each member of the team during the development of our project for NUS Orbital 2026.  
+PDF
+Contribution Overview
+Samal Somaaditya: Frontend (HTML, CSS, React), Deployment | 42 Hours
+[Teammate's Name]: Backend (Java, Database), Deployment | 44 Hours
+Detailed Task Log
 
-Soma - FrontEnd ReactJS HTML CSS 60hrs
-Raghav - Backend Java, Postgres 60 hrs
-Together - Web hosting on AWS and linking of frontend and backend research - 20 hrs
+Samal Somaaditya (Frontend & Infrastructure Setup)
+14 May 2026: Sat down together to figure out what our project should actually do, sketched out some basic screen layouts, and wrote down our core user stories. (4 hours)
+16 May 2026: Attended the Mission Control #1 workshops to learn more about React and Git, and set up our shared GitHub repository. (3 hours)
+18 May 2026: Created and submitted our Liftoff poster and the short elevator pitch video on Skylab. (4 hours)
+20 May 2026: Set up the React project folder, cleaned up the default files, and organized the folder structure. (5 hours)
+22 May 2026: Spent time learning how React components handle state, then built the login and registration pages using HTML and CSS. (6 hours)
+25 May 2026: Designed and built the main user dashboard interface and connected the pages so navigation works properly. (6 hours)
+28 May 2026: Created our AWS account, set up an EC2 server instance, and configured an S3 bucket with my teammate so we could host our app in the cloud. (5 hours)
+30 May 2026: Paired up with my teammate to link my React frontend to the Java backend using Axios, and fixed errors with CORS blocking our requests. (5 hours)
+31 May 2026: Helped write the main project README file and put together this project log for our Milestone 1 submission. (4 hours)
+Total Frontend Hours: 42 Hours
+
+[Sri Raghav] (Backend & Infrastructure Setup)
+14 May 2026: Discussed the project idea and mapped out how our tables and data should look in the database. (4 hours)
+16 May 2026: Attended the Mission Control #1 backend sessions to get a better handle on setting up a server application. (3 hours)
+19 May 2026: Initialized the backend environment using Java, configured our basic application settings, and got the local database running. (5 hours)
+22 May 2026: Wrote the backend code to process user registration and login, including hashing passwords securely before saving them to the database. (7 hours)
+26 May 2026: Built out the main API endpoints and data controllers needed to fetch and send information for our proof of concept. (7 hours)
+28 May 2026: Logged into AWS to help configure the security groups and firewall rules, deploying our Java server stack so it runs online. (6 hours)
+30 May 2026: Worked closely with Samal to debug data communication issues, making sure frontend inputs actually reached our Java backend and saved properly. (6 hours)
+31 May 2026: Tested our live AWS links to make sure everything works on the internet, and documented our API endpoints for our submission. (6 hours)
+Total Backend Hours: 44 Hours
+Collaborative Milestones & Shared Responsibilities
+Even though we split up the coding—with me focusing on the user interface and my partner handling the Java server and database—we did all of the heavy integration work together:
+AWS Cloud Deployment: Cloud hosting was completely new to both of us, so we worked on it together. We set up the EC2 virtual server, configured the network permissions, and got both the frontend and backend live on the web as a team.
+Connecting Frontend and Backend: We ran into a few roadblocks trying to get the React pages to talk to the Java endpoints. We hopped on a call to trace the data payloads back and forth until the connection was seamless.
+Milestone Review: Before submitting on Skylab, we reviewed our project together against the Orbital guidelines to make sure our technical proof of concept was fully functional.  
