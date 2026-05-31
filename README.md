@@ -4,6 +4,9 @@
 **Level of Achievement:** Apollo 11  
 **NUS Orbital 2026**
 Website Link : http://pgymp-frontend.s3-website-ap-southeast-1.amazonaws.com/
+Credentials currently stored in Postgres Database :
+<img width="167" height="80" alt="Screenshot 2026-06-01 at 3 33 20 AM" src="https://github.com/user-attachments/assets/834feba3-1a6c-4bf5-9d5e-8444025c187a" />
+
 
 ---
 
