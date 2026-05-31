@@ -16,7 +16,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public LoginResponse login(String matricId, String password) {
-        Optional<User> userOpt = userRepository.findBymatricId(matricId);
+        Optional<User> userOpt = userRepository.findByMatricId(matricId);
         if (!userOpt.isPresent()) {
             return new LoginResponse(false, "User not found - please register", null);
         }
@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public RegisterResponse register(String matricId, String password) {
-        if (userRepository.existsBymatricId(matricId)) {
+        if (userRepository.existsByMatricId(matricId)) {
             return new RegisterResponse(false, "matricId already exists");
 
         }

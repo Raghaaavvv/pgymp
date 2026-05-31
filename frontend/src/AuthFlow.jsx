@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 
-function AuthFlow({ authStep, setAuthStep }) {
+function AuthFlow({ authStep, setAuthStep, setUserId}) {
 //storage
   const [matricId, setMatricId] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +14,7 @@ function AuthFlow({ authStep, setAuthStep }) {
     try {
       // 'fetch' is JavaScript's built-in way to send network requests
 
-      const response = await fetch("http://localhost:8080/api/login", {
+      const response = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST", // POST means we are sending secret data, not just asking for a webpage.
         headers: { "Content-Type": "application/json" },
         // JSON.stringify converts our JavaScript variables into a plain text format Java can read.

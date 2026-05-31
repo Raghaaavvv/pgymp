@@ -18,6 +18,30 @@ function App() {
 
   const qrCodeData = "test123";
   const [authStep, setAuthStep] = useState(1);
+  const [userId, setUserId] = useState(null);
+
+  const handleCheckout = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/checkOut", {
+                method : "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: userId})
+                });
+
+            const data = await response.json();
+            if (data.status) {
+                setUserId(null);
+                setAuthStep(1);
+                } else {
+                    alert(data.message);
+             }
+         } catch (error) {
+             console.error("Checkout error:", error);
+             alert("An error occurred during checkout.");
+         }
+     };
+
+
 
 
 
@@ -32,7 +56,7 @@ function App() {
 
 {/* if statment of jsx*/}
       {authStep < 3 ? 
-      (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} />) : 
+      (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} />) :
       (
         <div className="card1 success-card">
             <h2 className="card-title">Welcome to PGymP!</h2>
@@ -42,7 +66,7 @@ function App() {
               <QRCodeCanvas value={qrCodeData} size={160} level="H" /> 
             </div>
 
-            <button onClick={() => setAuthStep(0)} className="checkout-btn">
+            <button onClick={handleCheckout} className="checkout-btn">
               Check Out (Log Out)
             </button>
         </div>

@@ -6,7 +6,7 @@ public class RegisterRequest {
 
     public RegisterRequest() {}
 
-    public void setmatricId(String matricId) {
+    public void setMatricId(String matricId) {
         this.matricId = matricId;
     }
 
@@ -18,7 +18,7 @@ public class RegisterRequest {
         return this.password;
     }
 
-    public String getmatricId() {
+    public String getMatricId() {
         return this.matricId;
     }
 }

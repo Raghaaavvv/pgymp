@@ -7,7 +7,7 @@ public class LoginRequest {
     public LoginRequest() {}
 
     public void setMatricId(String matricId) {
-        this.matricId = this.matricId;
+        this.matricId = matricId;
     }
 
     public void setPassword(String password) {

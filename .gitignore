@@ -14,7 +14,9 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+node_modules/
+.idea/
+backend/target/
 *.iws
 *.iml
 *.ipr

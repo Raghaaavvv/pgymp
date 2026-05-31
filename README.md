@@ -115,16 +115,16 @@ users
 │   Scan QR   │────▶│  Login Page │────▶│    Home     │
 │   at Gym    │     │             │     │  Dashboard  │
 └─────────────┘     └──────┬──────┘     └─────────────┘
-│
-┌────────────┴────────────┐
-▼                         ▼
-┌─────────────────┐      ┌─────────────────┐
-│  Existing User  │      │    New User     │
-│     Login       │      │    Register     │
-└────────┬────────┘      └────────┬────────┘
-│                         │
-└────────────┬────────────┘
-▼
+      | 
+      |
+      ▼                
+┌─────────────────┐      
+│  Existing User  │      
+│     Login       │     
+└────────┬────────┘      
+         |               
+         |
+         ▼
 ┌─────────────────┐
 │   Checked In    │
 │ Status Updated  │
@@ -155,10 +155,6 @@ The QR code system eliminates the need for residents to carry their matric card
 and removes the security guard as a bottleneck. A single scan updates the database
 automatically, replacing the entire manual logbook process.
 
-### Why Separate Login and Registration?
-Keeping login and registration as separate flows allows returning users to check
-in quickly without going through registration steps again. This reduces friction
-for the majority of users who already have accounts.
 
 ---
 

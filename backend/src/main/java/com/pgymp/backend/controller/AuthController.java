@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController          // Tells Spring this handles HTTP requests
 @RequestMapping("/api/auth")  // Base URL for all endpoints in this controller
-@CrossOrigin(origins = "http://localhost:3000")  // Allows React to call this
+@CrossOrigin(origins = {
+        "http://localhost:3000",
+        "http://localhost:5173"
+})  // Allows React to call this
 public class AuthController {
 
     @Autowired
@@ -20,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest request) {
-        return userService.register(request.getmatricId(), request.getPassword());
+        return userService.register(request.getMatricId(), request.getPassword());
     }
 
     @PostMapping("/checkOut")
