@@ -9,30 +9,27 @@ function AuthFlow({ authStep, setAuthStep, setUserId}) {
 
 
   const handleLoginSubmit = async (e) => {e.preventDefault(); 
-    setErrorMessage(""); // Clears any old red error text.
+    setErrorMessage(""); 
 
     try {
       // 'fetch' is JavaScript's built-in way to send network requests
 
       const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST", // POST means we are sending secret data, not just asking for a webpage.
+        method: "POST", 
         headers: { "Content-Type": "application/json" },
-        // JSON.stringify converts our JavaScript variables into a plain text format Java can read.
+        
         body: JSON.stringify({ matricId: matricId, password: password }) 
       });
       const data = await response.json();
 
-          if (data.status) {          // true = success
+          if (data.status) {          // true =success
               setUserId(data.id);
               setAuthStep(2);
-          } else {                    // false = failure
+          } else {                    // false= failure
               setErrorMessage(data.message);
           }
     
-      // FOR MILESTONE 1 TESTING ONLY: 
-      // If your friend's backend isn't ready yet, uncomment the line below 
-      // so you can still click "Next" and build the rest of your UI!
-      // setAuthStep(2); 
+  
     }
     catch (error) {
       console.error("Error during login:", error);
@@ -57,7 +54,7 @@ function AuthFlow({ authStep, setAuthStep, setUserId}) {
         <div className="card1">
           <h2 className="card-title">Sign In</h2>
           
-          {/* If errorMessage has text in it, render this red paragraph */}
+          
           {errorMessage && <p style={{ color: 'red', fontSize: '14px' }}>{errorMessage}</p>}
           
           <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
