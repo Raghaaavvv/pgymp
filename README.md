@@ -230,7 +230,7 @@ npm run dev
 
 ## Team
 
-| Name | Role |
-|------|------|
-| Raghav | Backend (Spring Boot, PostgreSQL, AWS) |
-| Samal | Frontend (React, Vite) |
+| Name | Role                              |
+|------|-----------------------------------|
+| Raghav | Backend (Spring Boot, PostgreSQL) |
+| Samal | Frontend (React, Vite, AWS)       |
