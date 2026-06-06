@@ -9,10 +9,10 @@ import Counter from "./counter.jsx";
 import ToDoList from "./todo.jsx";
 import DynamicWindow from "./DynamicWindow.jsx";
 import DigitalClock from "./digitalclock.jsx";
-import GymChart from "./GymChart.jsx";
 import AuthFlow from "./AuthFlow.jsx";
 import { useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import GymCapacityBox from './GymCapacityBox'
 
 function App() {
 
@@ -73,8 +73,7 @@ function App() {
       )}
 
       </div>
-      <GymChart />
-      
+      <GymCapacityBox />
       <Gymequipment />
       <Footer />
 
