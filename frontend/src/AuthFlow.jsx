@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 
-function AuthFlow({ authStep, setAuthStep, setUserId}) {
+function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity }) {
 //storage
   const [matricId, setMatricId] = useState("");
   const [password, setPassword] = useState("");
