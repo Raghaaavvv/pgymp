@@ -71,7 +71,7 @@ function App() {
             return (
                 <>
                     <Header setCurrentPage={setCurrentPage} />
-                    <FeedbackPage />
+                    <FeedbackPage setCurrentPage={setCurrentPage} />
                     <Footer />
                 </>
 
@@ -101,57 +101,60 @@ function App() {
             );
         }
 
-  return(
-    <>
-      <Header setCurrentPage={setCurrentPage} />
-      
-      <div className= "card-container">
-          <Card />
-      </div>
-      <div className= "login-container">
+    if ( currentPage === "home" ) {
+          return(
+            <>
+              <Header setCurrentPage={setCurrentPage} />
 
-{/* if statment of jsx*/}
-      {authStep < 3 ? 
-      (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} fetchCapacity={fetchCapacity} />) :
-      (
-        <div className="card1 success-card">
-            <h2 className="card-title">Welcome to PGymP!</h2>
-            <p className="card-text">Scan this at the security desk.</p>
-            
-            <div className="qr-wrapper">
-              <QRCodeCanvas value={qrCodeData} size={160} level="H" /> 
-            </div>
+              <div className= "card-container">
+                  <Card />
+              </div>
+              <div className= "login-container">
 
-            <button onClick={handleCheckout} className="checkout-btn">
-              Check Out (Log Out)
-            </button>
-        </div>
-      )}
+        {/* if statment of jsx*/}
+              {authStep < 3 ?
+              (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} fetchCapacity={fetchCapacity} />) :
+              (
+                <div className="card1 success-card">
+                    <h2 className="card-title">Welcome to PGymP!</h2>
+                    <p className="card-text">Scan this at the security desk.</p>
 
-      </div>
-      <GymCapacityBox currentCapacity={currentCapacity} maxCapacity={maxCapacity} />
-      <Gymequipment />
-      <Footer />
+                    <div className="qr-wrapper">
+                      <QRCodeCanvas value={qrCodeData} size={160} level="H" />
+                    </div>
 
+                    <button onClick={handleCheckout} className="checkout-btn">
+                      Check Out (Log Out)
+                    </button>
+                </div>
+              )}
 
-
+              </div>
+              <GymCapacityBox currentCapacity={currentCapacity} maxCapacity={maxCapacity} />
+              <Gymequipment />
+              <Footer />
 
 
 
 
 
-      {/*<Student name = "soma" block={30} isResident={true} />
-      <Student/> 
-      <Counter />
-      <ToDoList />
-      <DynamicWindow /> 
-       <DigitalClock/> */}
 
-      
-  
-      </>
-  
-  );
+
+
+
+          {/*<Student name = "soma" block={30} isResident={true} />
+          <Student/>
+          <Counter />
+          <ToDoList />
+          <DynamicWindow />
+           <DigitalClock/> */}
+
+
+
+          </>
+
+      );
+    }
   
 }
 /*Student.propTypes = {
