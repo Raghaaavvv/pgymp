@@ -84,7 +84,7 @@ function App() {
         return (
             <>
                 <Header setCurrentPage={setCurrentPage} />
-                <AboutPage />
+                <AboutPage setCurrentPage={setCurrentPage}/>
                 <Footer />
             </>
             );
