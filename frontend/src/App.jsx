@@ -13,6 +13,9 @@ import AuthFlow from "./AuthFlow.jsx";
 import { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import GymCapacityBox from './GymCapacityBox'
+import AboutPage from './Pages/AboutPage'
+import ContactPage from './Pages/ContactPage'
+import FeedbackPage from './Pages/FeedbackPage'
 
 function App() {
 
@@ -21,6 +24,8 @@ function App() {
   const [userId, setUserId] = useState(null);
   const [currentCapacity, setCurrentCapacity] = useState(15);
   const maxCapacity = 30;
+  const [currentPage, setCurrentPage] = useState("home");
+
 
   const fetchCapacity = async () => {
       try {
@@ -62,12 +67,43 @@ function App() {
      };
 
 
+    if (currentPage === "feedback") {
+            return (
+                <>
+                    <Header setCurrentPage={setCurrentPage} />
+                    <FeedbackPage />
+                    <Footer />
+                </>
+
+                );
+            }
 
 
+
+    if (currentPage === "about") {
+        return (
+            <>
+                <Header setCurrentPage={setCurrentPage} />
+                <AboutPage />
+                <Footer />
+            </>
+            );
+        }
+
+    if (currentPage === "contact") {
+        return (
+            <>
+                <Header setCurrentPage={setCurrentPage} />
+                <ContactPage />
+                <Footer />
+
+            </>
+            );
+        }
 
   return(
     <>
-      <Header/>
+      <Header setCurrentPage={setCurrentPage} />
       
       <div className= "card-container">
           <Card />

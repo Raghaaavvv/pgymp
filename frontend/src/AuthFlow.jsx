@@ -25,6 +25,7 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity }) {
           if (data.status) {          // true =success
               setUserId(data.id);
               setAuthStep(2);
+              fetchCapacity();
           } else {                    // false= failure
               setErrorMessage(data.message);
           }

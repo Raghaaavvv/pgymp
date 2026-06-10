@@ -47,20 +47,20 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
     if (currentCapacity == null) {
         return <p style={{textAlign: 'center'}}>Loading capacity...</p>
     }
-           return (
-               <div style={styles.widgetContainer}>
-                    <h1 style={styles.titleHeader}>Today's gym capacity</h1>
+    return (
+        <div style={styles.widgetContainer}>
+            <h1 style={styles.titleHeader}>Today's gym capacity</h1>
 
-                    <div style={styles.card}>
-                        <h2>{currentCapacity} / {maxCapacity}</h2>
-                        <div style={styles.progressContainer}>
-                            <div style={{...styles.progressFiller, width: `${percentage}%`}}></div>
+                <div style={styles.card}>
+                    <h2>{currentCapacity} / {maxCapacity}</h2>
+                       <div style={styles.progressContainer}>
+                           <div style={{...styles.progressFiller, width: `${percentage}%`}}></div>
                         </div>
                     </div>
                </div>
-                );
+    );
 //
-    }
+}
 
 
 export default GymCapacityBox;
