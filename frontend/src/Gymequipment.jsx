@@ -1,25 +1,87 @@
+import backMachineImg from './assets/back_machine.png'
+import barbellImg from './assets/barbell.png'
+import benchImg from './assets/benchpress.png'
+import dumbellImg from './assets/dumbell.png'
+import ellipticalImg from './assets/elliptical.png'
+import legPressImg from './assets/leg_press.png'
+import treadmillImg from './assets/treadmill.png'
+
 function Gymequipment() {
    
-    const equipmentname = [{"name": "Benches", "quantity": 2}, 
-        {"name": "Dumbbells", "quantity": 10}, {"name": "Barbells", "quantity": 2}, {"name": "Backmachines", "quantity": 1}, 
-        {"name": "Treadmills", "quantity": 3}, {"name": "Ellipticals", "quantity": 1}, {"name": "Legpresses", "quantity": 1}];
-        
+    const equipment = [
+        {"name": "Benches", "total": 2, "inUse": 1, "image": benchImg},
+        {"name": "Dumbbells", "total": 10, "inUse": 3, "image": dumbellImg},
+        {"name": "Barbells", "total": 2, "inUse": 1, "image": barbellImg},
+        {"name": "Back Machines", "total": 1, "inUse": 0, "image": backMachineImg},
+        {"name": "Treadmills", "total": 3, "inUse": 2, "image": treadmillImg},
+        {"name": "Ellipticals", "total": 1, "inUse": 0, "image": ellipticalImg},
+        {"name": "Leg Presses", "total": 1, "inUse": 1, "image": legPressImg}
+    ];
 
-    equipmentname.sort((a, b) => a.quantity - b.quantity);
-
-    const lowQuantity = equipmentname.filter((item) => 
-        item.quantity < 3).map( (item) => <li className="low-quantity">{item.name}: {item.quantity}</li>);
-
-    const HighQuantity = equipmentname.filter( (item) => item.quantity >=3)
-    .map( (item) => <li className="high-quantity">{item.name}: {item.quantity}</li>);
+    const styles = {
+        container: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '20px',
+            padding: '20px',
+        },
+        title: {
+            textAlign: 'center',
+            color: 'rgb(181, 68, 68)',
+            fontSize: '25px',
+            padding: '10px',
+        },
+        card: {
+            width: '150px',
+            padding: '20px',
+            borderRadius: '12px',
+            backgroundColor: '#ffffff',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            textAlign: 'center',
+            border: '1px solid #f0f0f0',
+        },
+        image: {
+            width: '50px',
+            objectFit: 'contain'
+        },
+        name: {
+            fontSize: '16px',
+            fontWeight: 'bold',
+            marginBottom: '10px',
+            color: '#333',
+        },
+        availability: {
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: 'rgb(181, 68, 68)',
+        },
+        availableText: {
+            fontSize: '12px',
+            color: '#888',
+            marginTop: '5px',
+        }
+    };
 
     return (
-        <ol className="equipment-list">
-            {lowQuantity}
-            {HighQuantity}
-        </ol>
+        <div>
+            <h2 style={styles.title}>Equipment Availability</h2>
+            <div style={styles.container}>
+                {equipment.map((item) => {
+                    const available = item.total - item.inUse;
+                    return (
+                        <div style={styles.card} key={item.name}>
+                            <img src={item.image} alt={item.name}
+                                    style ={styles.image}></img>
+                            <h3 style={styles.name}>{item.name}</h3>
+                            <p style={styles.availability}>{available} / {item.total}</p>
+                            <p style={styles.availableText}>Available</p>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
     );
-
 }
 
 export default Gymequipment;

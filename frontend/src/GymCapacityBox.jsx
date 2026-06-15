@@ -52,7 +52,7 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
             <h1 style={styles.titleHeader}>Today's gym capacity</h1>
 
                 <div style={styles.card}>
-                    <h2>{currentCapacity} / {maxCapacity}</h2>
+                    <h2 style={{ font: 'sans-serif' }}>{currentCapacity / maxCapacity * 100}% full</h2>
                        <div style={styles.progressContainer}>
                            <div style={{...styles.progressFiller, width: `${percentage}%`}}></div>
                         </div>

@@ -77,3 +77,25 @@
 .submit-button:active {
     transform: translateY(2px);
 }
+
+/*
+.app-container {
+    display: grid;
+    grid-template-columns: 1fr 300px; */
+/* Main content on left, sidebar on right *//*
+
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+*/
+/* Make sure the login/cards look like distinct "modules" *//*
+
+.card-container, .login-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}*/

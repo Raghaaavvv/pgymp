@@ -19,7 +19,8 @@ import FeedbackPage from './Pages/FeedbackPage'
 
 function App() {
 
-  const qrCodeData = "test123";
+  const [token, setToken] = useState(null);
+  const qrCodeData = token ? token : "";
   const [authStep, setAuthStep] = useState(1);
   const [userId, setUserId] = useState(null);
   const [currentCapacity, setCurrentCapacity] = useState(15);
@@ -113,7 +114,8 @@ function App() {
 
         {/* if statment of jsx*/}
               {authStep < 3 ?
-              (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} fetchCapacity={fetchCapacity} />) :
+              (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} fetchCapacity={fetchCapacity}
+                    setToken={setToken} />) :
               (
                 <div className="card1 success-card">
                     <h2 className="card-title">Welcome to PGymP!</h2>
@@ -155,7 +157,7 @@ function App() {
 
       );
     }
-  
+
 }
 /*Student.propTypes = {
   name: PropTypes.string.isRequired,

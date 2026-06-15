@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
 
-function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity }) {
+function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken }) {
 //storage
   const [matricId, setMatricId] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
 
 
   const handleLoginSubmit = async (e) => {e.preventDefault(); 
@@ -24,6 +25,7 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity }) {
 
           if (data.status) {          // true =success
               setUserId(data.id);
+              setToken(data.token);
               setAuthStep(2);
               fetchCapacity();
           } else {                    // false= failure
