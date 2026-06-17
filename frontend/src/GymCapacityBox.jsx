@@ -16,7 +16,7 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
             marginBottom: '10px'
             },
         card: {
-                width: '300px',
+                width: '200px',
                 padding: '20px',
                 borderRadius: '12px',
                 backgroundColor: '#ffffff',
@@ -52,7 +52,7 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
             <h1 style={styles.titleHeader}>Today's gym capacity</h1>
 
                 <div style={styles.card}>
-                    <h2 style={{ font: 'sans-serif' }}>{rawPercentage}% full</h2>
+                    <h2 style={{ font: 'sans-serif', fontSize: "20px", marginTop: '5px' }}>{rawPercentage}% full</h2>
                        <div style={styles.progressContainer}>
                            <div style={{...styles.progressFiller, width: `${percentage}%`}}></div>
                         </div>

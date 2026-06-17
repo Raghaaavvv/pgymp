@@ -28,7 +28,7 @@ function App() {
 
   const [token, setToken] = useState(null);
   const qrCodeData = token ? token : "";
-  const [authStep, setAuthStep] = useState(3);
+  const [authStep, setAuthStep] = useState(1);
   const [userId, setUserId] = useState(null);
   const [currentCapacity, setCurrentCapacity] = useState(13);
   const maxCapacity = 30;

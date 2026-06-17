@@ -33,7 +33,7 @@ function Gymequipment() {
             padding: '10px',
         },
         card: {
-            width: '150px',
+            width: '50px',
             padding: '20px',
             borderRadius: '12px',
             backgroundColor: '#ffffff',
@@ -42,17 +42,17 @@ function Gymequipment() {
             border: '1px solid #f0f0f0',
         },
         image: {
-            width: '50px',
+            width: '30px',
             objectFit: 'contain'
         },
         name: {
-            fontSize: '16px',
+            fontSize: '10px',
             fontWeight: 'bold',
             marginBottom: '10px',
             color: '#333',
         },
         availability: {
-            fontSize: '20px',
+            fontSize: '16px',
             fontWeight: 'bold',
             color: 'rgb(181, 68, 68)',
         },
