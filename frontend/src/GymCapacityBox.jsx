@@ -41,7 +41,7 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
         }
 
 
-    const rawPercentage = (currentCapacity / maxCapacity) * 100;
+    const rawPercentage = Math.round((currentCapacity / maxCapacity) * 100);
     const percentage = Math.min(Math.max(rawPercentage, 0), 100);
 
     if (currentCapacity == null) {
@@ -52,7 +52,7 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
             <h1 style={styles.titleHeader}>Today's gym capacity</h1>
 
                 <div style={styles.card}>
-                    <h2 style={{ font: 'sans-serif' }}>{currentCapacity / maxCapacity * 100}% full</h2>
+                    <h2 style={{ font: 'sans-serif' }}>{rawPercentage}% full</h2>
                        <div style={styles.progressContainer}>
                            <div style={{...styles.progressFiller, width: `${percentage}%`}}></div>
                         </div>

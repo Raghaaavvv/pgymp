@@ -3,7 +3,6 @@ import Footer from "./Footer.jsx";
 import Gymequipment from "./Gymequipment.jsx";
 import Card from "./card.jsx";
 import Student from "./student.jsx";
-//import PropTypes from "prop-types";
 import LoginButton from "./loginbutton.jsx";
 import Counter from "./counter.jsx";
 import ToDoList from "./todo.jsx";
@@ -16,16 +15,34 @@ import GymCapacityBox from './GymCapacityBox'
 import AboutPage from './Pages/AboutPage'
 import ContactPage from './Pages/ContactPage'
 import FeedbackPage from './Pages/FeedbackPage'
+import backMachineImg from './assets/back_machine.png'
+import barbellImg from './assets/barbell.png'
+import benchImg from './assets/benchpress.png'
+import dumbellImg from './assets/dumbell.png'
+import ellipticalImg from './assets/elliptical.png'
+import legPressImg from './assets/leg_press.png'
+import treadmillImg from './assets/treadmill.png'
+
 
 function App() {
 
   const [token, setToken] = useState(null);
   const qrCodeData = token ? token : "";
-  const [authStep, setAuthStep] = useState(1);
+  const [authStep, setAuthStep] = useState(3);
   const [userId, setUserId] = useState(null);
-  const [currentCapacity, setCurrentCapacity] = useState(15);
+  const [currentCapacity, setCurrentCapacity] = useState(13);
   const maxCapacity = 30;
   const [currentPage, setCurrentPage] = useState("home");
+  const [equipmentData, setEquipmentData] = useState([
+      {"name": "Benches", "total": 2, "inUse": 1, "image": benchImg},
+      {"name": "Dumbbells", "total": 10, "inUse": 3, "image": dumbellImg},
+      {"name": "Barbells", "total": 2, "inUse": 1, "image": barbellImg},
+      {"name": "Back Machines", "total": 1, "inUse": 0, "image": backMachineImg},
+      {"name": "Treadmills", "total": 3, "inUse": 2, "image": treadmillImg},
+      {"name": "Ellipticals", "total": 1, "inUse": 0, "image": ellipticalImg},
+      {"name": "Leg Presses", "total": 1, "inUse": 1, "image": legPressImg}
+      ]);
+
 
 
   const fetchCapacity = async () => {
@@ -39,9 +56,21 @@ function App() {
       }
   }
 
+  const fetchEquipment = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/equipment");
+            const data = await response.json();
+            setEquipmentData(data);
+            }
+        catch(error) {
+            console.error("Error fetching data", error);
+            }
+        }
+
   useEffect(() => {
       fetchCapacity();
-      const interval = setInterval(fetchCapacity, 10000);
+      fetchEquipment();
+      const interval = setInterval(() => {fetchEquipment(); fetchCapacity();}, 10000);
       return () => clearInterval(interval);
   }, []);
 
@@ -113,9 +142,9 @@ function App() {
               <div className= "login-container">
 
         {/* if statment of jsx*/}
-              {authStep < 3 ?
+              {authStep < 4 ?
               (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} fetchCapacity={fetchCapacity}
-                    setToken={setToken} />) :
+                    setToken={setToken} equipmentData={equipmentData} />) :
               (
                 <div className="card1 success-card">
                     <h2 className="card-title">Welcome to PGymP!</h2>
