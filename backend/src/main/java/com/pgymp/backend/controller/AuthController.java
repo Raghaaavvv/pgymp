@@ -1,6 +1,7 @@
 package com.pgymp.backend.controller;
 
 import com.pgymp.backend.dto.*;
+import com.pgymp.backend.service.CapacityService;
 import com.pgymp.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CapacityService capacityService;
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
@@ -31,5 +35,9 @@ public class AuthController {
         return userService.checkOut(request.getUserId());
     }
 
+    @GetMapping("/capacity") //java to json converter?
+    public Capacity getCapacity() {
+        return new Capacity(CapacityService.getCurrentCount());
+    }
 
 }

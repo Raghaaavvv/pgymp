@@ -15,6 +15,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CapacityService capacityService;
+
     public LoginResponse login(String matricId, String password) {
         Optional<User> userOpt = userRepository.findByMatricId(matricId);
         if (!userOpt.isPresent()) {
@@ -30,6 +33,7 @@ public class UserService {
         }
         user.setCheckedIn(true);
         userRepository.save(user);
+        capacityService.increment();
         return new LoginResponse(true, "Login successful", user.getId());
     }
 
@@ -55,6 +59,7 @@ public class UserService {
         }
         user.setCheckedIn(false);
         userRepository.save(user);
+        capacityService.decrement();
         return new CheckOutResponse(true, "Check Out successful", userId);
 
     }
