@@ -7,6 +7,7 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, e
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [selectedEquipment, setSelectedEquipment] = useState([]);
+    const availableEquipment = Array.isArray(equipmentData) ? equipmentData : [];
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
@@ -113,8 +114,8 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, e
                         }}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}
                     >
-                        {equipmentData.map((item) => (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {availableEquipment.map((item) => (
+                            <div key={item.name} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <input
                                     type="checkbox"
                                     id={item.name}

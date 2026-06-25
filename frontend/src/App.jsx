@@ -49,6 +49,9 @@ function App() {
   const fetchCapacity = async () => {
       try {
           const response = await fetch(`${API_BASE_URL}/api/auth/capacity`);
+          if (!response.ok) {
+              throw new Error(`Capacity request failed: ${response.status}`);
+          }
           const data = await response.json();
           setCurrentCapacity(data.currentCount);
           }
@@ -60,8 +63,13 @@ function App() {
   const fetchEquipment = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/auth/equipment`);
+            if (!response.ok) {
+                throw new Error(`Equipment request failed: ${response.status}`);
+            }
             const data = await response.json();
-            setEquipmentData(data);
+            if (Array.isArray(data)) {
+                setEquipmentData(data);
+            }
             }
         catch(error) {
             console.error("Error fetching data", error);
@@ -202,4 +210,3 @@ Student.defaultProps = {
 }; */ //these not working???
 
 export default App
-
