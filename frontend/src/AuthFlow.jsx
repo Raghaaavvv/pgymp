@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
-function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, equipmentData }) {
+function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fetchEquipment, setToken, equipmentData }) {
     const [matricId, setMatricId] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -38,6 +38,28 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, e
             setSelectedEquipment(selectedEquipment.filter(e => e !== itemName));
         } else {
             setSelectedEquipment([...selectedEquipment, itemName]);
+        }
+    }
+
+    const handleEquipmentSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/equipment/checkIn`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: userId, equipmentNames: selectedEquipment })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Equipment check-in failed: ${response.status}`);
+            }
+
+            await response.json();
+            fetchEquipment();
+            setAuthStep(4);
+        } catch (error) {
+            console.error("Equipment check-in error:", error);
+            setErrorMessage("Could not submit equipment selection. Please try again.");
         }
     }
 
@@ -107,11 +129,9 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, e
                 <div className="card1" style={{ maxWidth: '300px' }}>
                     <h2 className="card-title">Workout Plan</h2>
                     <p>Select equipment you plan to use:</p>
+                    {errorMessage && <p style={{ color: 'red', fontSize: '14px' }}>{errorMessage}</p>}
                     <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            setAuthStep(4);
-                        }}
+                        onSubmit={handleEquipmentSubmit}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}
                     >
                         {availableEquipment.map((item) => (

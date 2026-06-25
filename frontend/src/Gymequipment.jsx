@@ -1,22 +1,5 @@
-import backMachineImg from './assets/back_machine.png'
-import barbellImg from './assets/barbell.png'
-import benchImg from './assets/benchpress.png'
-import dumbellImg from './assets/dumbell.png'
-import ellipticalImg from './assets/elliptical.png'
-import legPressImg from './assets/leg_press.png'
-import treadmillImg from './assets/treadmill.png'
-
-function Gymequipment() {
-   
-    const equipment = [
-        {"name": "Benches", "total": 2, "inUse": 1, "image": benchImg},
-        {"name": "Dumbbells", "total": 10, "inUse": 3, "image": dumbellImg},
-        {"name": "Barbells", "total": 2, "inUse": 1, "image": barbellImg},
-        {"name": "Back Machines", "total": 1, "inUse": 0, "image": backMachineImg},
-        {"name": "Treadmills", "total": 3, "inUse": 2, "image": treadmillImg},
-        {"name": "Ellipticals", "total": 1, "inUse": 0, "image": ellipticalImg},
-        {"name": "Leg Presses", "total": 1, "inUse": 1, "image": legPressImg}
-    ];
+function Gymequipment({ equipment }) {
+    const equipmentList = Array.isArray(equipment) ? equipment : [];
 
     const styles = {
         container: {
@@ -67,7 +50,7 @@ function Gymequipment() {
         <div>
             <h2 style={styles.title}>Equipment Availability</h2>
             <div style={styles.container}>
-                {equipment.map((item) => {
+                {equipmentList.map((item) => {
                     const available = item.total - item.inUse;
                     return (
                         <div style={styles.card} key={item.name}>

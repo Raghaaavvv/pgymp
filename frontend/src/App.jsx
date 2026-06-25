@@ -25,6 +25,16 @@ import treadmillImg from './assets/treadmill.png'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
+const equipmentImages = {
+  "Benches": benchImg,
+  "Dumbbells": dumbellImg,
+  "Barbells": barbellImg,
+  "Back Machines": backMachineImg,
+  "Treadmills": treadmillImg,
+  "Ellipticals": ellipticalImg,
+  "Leg Presses": legPressImg
+};
+
 function App() {
 
   const [token, setToken] = useState(null);
@@ -68,7 +78,11 @@ function App() {
             }
             const data = await response.json();
             if (Array.isArray(data)) {
-                setEquipmentData(data);
+                // Backend sends counts; frontend adds the local image asset for display.
+                setEquipmentData(data.map(item => ({
+                    ...item,
+                    image: equipmentImages[item.name]
+                })));
             }
             }
         catch(error) {
@@ -96,6 +110,7 @@ function App() {
                 setUserId(null);
                 setAuthStep(1);
                 fetchCapacity();
+                fetchEquipment();
                 } else {
                     alert(data.message);
              }
@@ -152,8 +167,9 @@ function App() {
 
         {/* if statment of jsx*/}
               {authStep < 4 ?
-              (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} setUserId={setUserId} fetchCapacity={fetchCapacity}
-                    setToken={setToken} equipmentData={equipmentData} />) :
+              (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} userId={userId} setUserId={setUserId}
+                    fetchCapacity={fetchCapacity} fetchEquipment={fetchEquipment} setToken={setToken}
+                    equipmentData={equipmentData} />) :
               (
                 <div className="card1 success-card">
                     <h2 className="card-title">Welcome to PGymP!</h2>
@@ -171,7 +187,7 @@ function App() {
 
               </div>
               <GymCapacityBox currentCapacity={currentCapacity} maxCapacity={maxCapacity} />
-              <Gymequipment />
+              <Gymequipment equipment={equipmentData} />
               <Footer />
 
 
