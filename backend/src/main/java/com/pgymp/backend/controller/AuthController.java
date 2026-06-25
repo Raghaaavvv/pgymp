@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController          // Tells Spring this handles HTTP requests
 @RequestMapping("/api/auth")  // Base URL for all endpoints in this controller
-@CrossOrigin(origins = {
-        "http://localhost:3000",
-        "http://localhost:5173"
-})  // Allows React to call this
+@CrossOrigin(origins = "*")  // Allows React to call this
 public class AuthController {
 
     @Autowired

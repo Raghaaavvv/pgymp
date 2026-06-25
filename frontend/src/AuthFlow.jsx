@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+
 function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, equipmentData }) {
     const [matricId, setMatricId] = useState("");
     const [password, setPassword] = useState("");
@@ -10,7 +12,7 @@ function AuthFlow({ authStep, setAuthStep, setUserId, fetchCapacity, setToken, e
         e.preventDefault();
         setErrorMessage("");
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ matricId: matricId, password: password })

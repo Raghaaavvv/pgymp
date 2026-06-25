@@ -23,6 +23,7 @@ import ellipticalImg from './assets/elliptical.png'
 import legPressImg from './assets/leg_press.png'
 import treadmillImg from './assets/treadmill.png'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
   const qrCodeData = token ? token : "";
   const [authStep, setAuthStep] = useState(1);
   const [userId, setUserId] = useState(null);
-  const [currentCapacity, setCurrentCapacity] = useState(13);
+  const [currentCapacity, setCurrentCapacity] = useState(null);
   const maxCapacity = 30;
   const [currentPage, setCurrentPage] = useState("home");
   const [equipmentData, setEquipmentData] = useState([
@@ -47,7 +48,7 @@ function App() {
 
   const fetchCapacity = async () => {
       try {
-          const response = await fetch("http://localhost:8080/api/auth/capacity");
+          const response = await fetch(`${API_BASE_URL}/api/auth/capacity`);
           const data = await response.json();
           setCurrentCapacity(data.currentCount);
           }
@@ -58,7 +59,7 @@ function App() {
 
   const fetchEquipment = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/auth/equipment");
+            const response = await fetch(`${API_BASE_URL}/api/auth/equipment`);
             const data = await response.json();
             setEquipmentData(data);
             }
@@ -76,7 +77,7 @@ function App() {
 
   const handleCheckout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/auth/checkOut", {
+            const response = await fetch(`${API_BASE_URL}/api/auth/checkOut`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: userId})
@@ -201,5 +202,4 @@ Student.defaultProps = {
 }; */ //these not working???
 
 export default App
-
 
