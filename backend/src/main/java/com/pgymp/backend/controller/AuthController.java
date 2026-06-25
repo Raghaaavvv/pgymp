@@ -35,9 +35,9 @@ public class AuthController {
         return userService.checkOut(request.getUserId());
     }
 
-    @GetMapping("/capacity") //java to json converter?
+    @GetMapping("/capacity")
     public Capacity getCapacity() {
-        return new Capacity(CapacityService.getCurrentCount());
+        return new Capacity(capacityService.getCurrentCount());
     }
 
 }

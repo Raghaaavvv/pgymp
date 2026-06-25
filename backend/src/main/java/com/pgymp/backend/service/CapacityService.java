@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class CapacityService {
-    //gemini said using AtomicInteger is better?
     private final AtomicInteger currentCount = new AtomicInteger(0);
 
     public int increment() {
@@ -14,11 +13,7 @@ public class CapacityService {
     }
 
     public int decrement() {
-        currentCount.decrementAndGet();
-        if (currentCount.get() < 0) {
-            currentCount.set(0);
-        }
-        return currentCount.get();
+        return currentCount.updateAndGet(count -> Math.max(0, count - 1));
     }
 
     public int getCurrentCount() {
