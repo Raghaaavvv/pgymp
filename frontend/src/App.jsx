@@ -63,7 +63,10 @@ function App() {
               throw new Error(`Capacity request failed: ${response.status}`);
           }
           const data = await response.json();
-          setCurrentCapacity(data.currentCount);
+          // Backend normally sends { currentCount: 12 }. If it ever sends just 12,
+          // this still keeps the frontend display working.
+          const nextCapacity = typeof data === "number" ? data : data.currentCount;
+          setCurrentCapacity(Number(nextCapacity));
           }
       catch (error) {
           console.error("Error fetching capacity", error);

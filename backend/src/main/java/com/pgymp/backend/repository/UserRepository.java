@@ -13,6 +13,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByMatricId(String matricId);
 
+    long countByCheckedInTrue();
+
+    long countByCheckedInFalse();
+
     //TODO some weird database tracking -learn after Milestone2
 
 

@@ -1,22 +1,23 @@
 package com.pgymp.backend.service;
 
+import com.pgymp.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class CapacityService {
-    private final AtomicInteger currentCount = new AtomicInteger(0);
+    @Autowired
+    private UserRepository userRepository;
 
-    public int increment() {
-        return currentCount.incrementAndGet();
+    public long increment() {
+        return getCurrentCount();
     }
 
-    public int decrement() {
-        return currentCount.updateAndGet(count -> Math.max(0, count - 1));
+    public long decrement() {
+        return getCurrentCount();
     }
 
-    public int getCurrentCount() {
-        return currentCount.get();
+    public long getCurrentCount() {
+        return userRepository.countByCheckedInTrue();
     }
 }

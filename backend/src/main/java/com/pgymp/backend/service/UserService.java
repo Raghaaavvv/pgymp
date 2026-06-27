@@ -16,9 +16,6 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private CapacityService capacityService;
-
-    @Autowired
     private EquipmentService equipmentService;
 
     public LoginResponse login(String matricId, String password) {
@@ -36,7 +33,7 @@ public class UserService {
         }
         user.setCheckedIn(true);
         userRepository.save(user);
-        capacityService.increment();
+
         return new LoginResponse(true, "Login successful", user.getId());
     }
 
@@ -62,9 +59,17 @@ public class UserService {
         }
         user.setCheckedIn(false);
         userRepository.save(user);
-        capacityService.decrement();
+
         equipmentService.checkOutEquipment(userId);
         return new CheckOutResponse(true, "Check Out successful", userId);
 
+    }
+
+    public long getCheckedInCount() {
+        return userRepository.countByCheckedInTrue();
+    }
+
+    public long getCheckedOutCount() {
+        return userRepository.countByCheckedInFalse();
     }
 }

@@ -40,13 +40,15 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
             }
         }
 
+    const numericCapacity = Number(currentCapacity);
+    const numericMaxCapacity = Number(maxCapacity);
 
-    const rawPercentage = Math.round((currentCapacity / maxCapacity) * 100);
-    const percentage = Math.min(Math.max(rawPercentage, 0), 100);
-
-    if (currentCapacity == null) {
+    if (!Number.isFinite(numericCapacity) || !Number.isFinite(numericMaxCapacity) || numericMaxCapacity <= 0) {
         return <p style={{textAlign: 'center'}}>Loading capacity...</p>
     }
+
+    const rawPercentage = Math.round((numericCapacity / numericMaxCapacity) * 100);
+    const percentage = Math.min(Math.max(rawPercentage, 0), 100);
     return (
         <div style={styles.widgetContainer}>
             <h1 style={styles.titleHeader}>Today's gym capacity</h1>

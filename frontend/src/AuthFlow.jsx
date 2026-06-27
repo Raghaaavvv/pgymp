@@ -21,7 +21,8 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
             const data = await response.json();
             if (data.status) {
                 setUserId(data.id);
-                setToken(data.token);
+                // LoginResponse currently returns the user id, not a separate token.
+                setToken(String(data.id));
                 setAuthStep(2);
                 fetchCapacity();
             } else {

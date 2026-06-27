@@ -1,13 +1,13 @@
 package com.pgymp.backend.dto;
 
 public class Capacity {
-    private int currentCount;
+    private long currentCount;
 
-    public Capacity(int currentCount) {
+    public Capacity(long currentCount) {
         this.currentCount = currentCount;
     }
 
-    public int getCurrentCount() {
+    public long getCurrentCount() {
         return this.currentCount;
     }
 }
