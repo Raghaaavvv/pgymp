@@ -7,6 +7,9 @@ function ScannerPage() {
     const [isSuccess, setIsSuccess] = useState(null);
     const [useCamera, setUseCamera] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [adminPassword, setAdminPassword] = useState("");
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [error, setError] = useState("");
 
     const styles = {
         container: {
@@ -103,6 +106,33 @@ function ScannerPage() {
             border: `1px solid ${isSuccess ? '#a8d5b0' : '#f5c0c0'}`
         }
     };
+
+    const handleAdminLogin = () => {
+            if (adminPassword === "abc") {  // Simple hardcoded password
+                setIsAuthenticated(true);
+            } else {
+                setError("Incorrect password!");
+            }
+        };
+
+        if (!isAuthenticated) {
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
+                    <h2>Security Staff Access Only</h2>
+                    <input
+                        type="password"
+                        placeholder="Enter staff password"
+                        value={adminPassword}
+                        onChange={(e) => setAdminPassword(e.target.value)}
+                        style={{ padding: '8px', margin: '10px' }}
+                    />
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    <button onClick={handleAdminLogin}>
+                        Access Scanner
+                    </button>
+                </div>
+            );
+        }
 
     const sendTokenToBackend = async (scannedToken) => {
         if (!scannedToken) {

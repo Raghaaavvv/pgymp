@@ -61,7 +61,7 @@ function GymCapacityBox({currentCapacity, maxCapacity}) {
                     </div>
                </div>
     );
-//
+
 }
 
 

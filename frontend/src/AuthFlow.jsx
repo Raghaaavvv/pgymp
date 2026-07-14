@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
@@ -8,29 +8,79 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
     const [errorMessage, setErrorMessage] = useState("");
     const [selectedEquipment, setSelectedEquipment] = useState([]);
     const availableEquipment = Array.isArray(equipmentData) ? equipmentData : [];
+    const [queuePosition, setQueuePosition] = useState(null);
+    const [inQueue, setInQueue] = useState(false);
+
+    useEffect(() => {
+        if (!inQueue) return; //
+
+        const interval = setInterval(async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/api/auth/queueStatus?matricId=${matricId}`);
+                const data = await response.json();
+
+                if (data.checkedIn) {
+                    setInQueue(false);
+                    setAuthStep(2);
+                } else {
+
+                    setQueuePosition(data.position);
+                }
+            } catch (error) {
+                console.error("Error checking queue status:", error);
+            }
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [inQueue, matricId]);
+
+
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage("");
+
         try {
-            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ matricId: matricId, password: password })
             });
+
             const data = await response.json();
+
             if (data.status) {
                 setUserId(data.id);
-                // LoginResponse currently returns the user id, not a separate token.
-                setToken(String(data.id));
+                setToken(data.token);
                 setAuthStep(2);
                 fetchCapacity();
+            } else if (data.message.includes("queue")) {
+
+                const position = data.message.match(/\d+/)[0];
+                setQueuePosition(parseInt(position));
+                setInQueue(true);
+                setAuthStep(5);
             } else {
                 setErrorMessage(data.message);
             }
         } catch (error) {
             console.error("Error during login:", error);
             setErrorMessage("An error occurred. Please try again.");
+        }
+    };
+
+    const handleLeaveQueue = async () => {
+        try {
+            await fetch("http://localhost:8080/api/queue/leave", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ matricId: matricId })
+            });
+            setInQueue(false);
+            setQueuePosition(null);
+            setAuthStep(1);
+        } catch (error) {
+            console.error("Error leaving queue:", error);
         }
     };
 
@@ -149,6 +199,32 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
                         ))}
                         <button type="submit" className="login-btn">Check In</button>
                     </form>
+                </div>
+            </div>
+        );
+    }
+
+    if (authStep === 5) {
+        return (
+            <div className="card-container">
+                <div className="card1" style={{ maxWidth: '300px', textAlign: 'center' }}>
+                    <h2 className="card-title">Gym is Full!</h2>
+                    <p>You are currently</p>
+                    <h1 style={{ fontSize: '60px', color: 'rgb(181, 68, 68)' }}>
+                        #{queuePosition}
+                    </h1>
+                    <p>in the waitlist</p>
+                    <p style={{ fontSize: '12px', color: '#888', marginTop: '10px' }}>
+                        You will be automatically checked in when a spot opens up!
+                        This page updates every 10 seconds.
+                    </p>
+                    <button
+                        onClick={handleLeaveQueue}
+                        style={{ marginTop: '20px' }}
+                        className="checkout-btn"
+                    >
+                        Leave Queue
+                    </button>
                 </div>
             </div>
         );

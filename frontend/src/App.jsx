@@ -1,14 +1,8 @@
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import Gymequipment from "./Gymequipment.jsx";
-import Card from "./card.jsx";
-import Student from "./student.jsx";
-import LoginButton from "./loginbutton.jsx";
-import Counter from "./counter.jsx";
-import ToDoList from "./todo.jsx";
-import DynamicWindow from "./DynamicWindow.jsx";
-import DigitalClock from "./digitalclock.jsx";
 import AuthFlow from "./AuthFlow.jsx";
+import Card from "./card.jsx";
 import { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import GymCapacityBox from './GymCapacityBox'
@@ -42,7 +36,7 @@ function App() {
   const qrCodeData = token ? token : "";
   const [authStep, setAuthStep] = useState(1);
   const [userId, setUserId] = useState(null);
-  const [currentCapacity, setCurrentCapacity] = useState(null);
+  const [currentCapacity, setCurrentCapacity] = useState(30);
   const maxCapacity = 30;
   const [currentPage, setCurrentPage] = useState("home");
   const [equipmentData, setEquipmentData] = useState([
@@ -179,7 +173,7 @@ function App() {
 
                     <div className="login-container">
                         {/* if statement of jsx*/}
-                        {authStep < 4 ? (
+                        {authStep < 4 || authStep === 5 ? (
                             <AuthFlow
                                 authStep={authStep}
                                 setAuthStep={setAuthStep}
@@ -212,7 +206,7 @@ function App() {
                 </>
             );
         }
-    } 
+    }
 
     export default App;
 
