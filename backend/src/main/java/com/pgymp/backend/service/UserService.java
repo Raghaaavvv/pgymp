@@ -17,6 +17,10 @@ public class UserService {
 
     @Autowired
     private EquipmentService equipmentService;
+    @Autowired
+    private CapacityService capacityService;
+    @Autowired
+    private Qservice qService;
 
     public LoginResponse login(String matricId, String password) {
         Optional<User> userOpt = userRepository.findByMatricId(matricId);
@@ -30,6 +34,10 @@ public class UserService {
         }
         if (user.isCheckedIn()) {
             return new LoginResponse(false, "User already checked in", null);
+        }
+        if (capacityService.getCurrentCount() >= 30) {
+            int queuePosition = qService.joinQ(user.getMatricId());
+            return new LoginResponse(false, "Gym is at full capacity. You are number " + queuePosition + " in the queue.", null);
         }
         user.setCheckedIn(true);
         userRepository.save(user);
@@ -61,7 +69,19 @@ public class UserService {
         userRepository.save(user);
 
         equipmentService.checkOutEquipment(userId);
-        return new CheckOutResponse(true, "Check Out successful", userId);
+        if (qService.hasWaitingUsers()) {
+            String nextMatricId = qService.removefromQ();
+            Optional<User> nextUserOpt = userRepository.findByMatricId(nextMatricId);
+
+            if (nextUserOpt.isPresent()) {
+                User nextUser = nextUserOpt.get();
+                nextUser.setCheckedIn(true);
+                userRepository.save(nextUser);
+
+                return new CheckOutResponse(true, "Checked Out successful. Next queued user checked in.", userId);
+            }
+        }
+        return new CheckOutResponse(true, "Checked Out successful", userId);
 
     }
 
