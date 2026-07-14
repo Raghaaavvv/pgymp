@@ -36,8 +36,8 @@ function App() {
   const qrCodeData = token ? token : "";
   const [authStep, setAuthStep] = useState(1);
   const [userId, setUserId] = useState(null);
-  const [currentCapacity, setCurrentCapacity] = useState(30);
-  const maxCapacity = 30;
+  const [currentCapacity, setCurrentCapacity] = useState(2);
+  const maxCapacity = 2;
   const [currentPage, setCurrentPage] = useState("home");
   const [equipmentData, setEquipmentData] = useState([
       {"name": "Benches", "total": 2, "inUse": 1, "image": benchImg},

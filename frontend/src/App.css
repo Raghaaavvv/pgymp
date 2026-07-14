@@ -2,6 +2,8 @@
     text-align: center;
     color: rgb(181, 68, 68);
     font-size: 50px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     padding: 10px;
     margin-bottom: 10px;
 }
@@ -14,88 +16,71 @@
 }
 
 .feedback-card {
-    width: 300px;
-    padding: 20px;
-    borderRadius: 12px;
-    backgroundColor: #ffffff;
-    boxShadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    textAlign: center;
+    width: 320px;
+    padding: 28px;
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.05);
+    text-align: center;
     border: 1px solid #f0f0f0;
+    transition: box-shadow 0.25s ease;
 }
 
 .feedback-textarea {
     width: 100%;
     max-width: 600px;
     height: 150px;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    padding: 14px;
+    border: 2px solid #e2e2e2;
+    border-radius: 10px;
     font-family: sans-serif;
     font-size: 16px;
     resize: vertical;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
-
 
 .feedback-textarea:focus {
     border-color: rgb(60, 153, 128);
+    box-shadow: 0 0 0 3px rgba(60, 153, 128, 0.15);
     outline: none;
 }
 
-
-
-
 .submit-button {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
-    height: 35px;
-    font-size: 10px;
+    min-width: 150px;
+    height: 38px;
+    font-size: 13px;
+    font-weight: 600;
     background-color: rgb(60, 153, 128);
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin: 5px
+    transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    margin: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
-
 
 .submit-button:hover {
-    filter: brightness(0.9);
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
-
 
 .submit-button-red {
     background-color: rgb(181, 68, 68);
 }
 
-
 .submit-button:active {
-    transform: translateY(2px);
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/*
-.app-container {
-    display: grid;
-    grid-template-columns: 1fr 300px; */
-/* Main content on left, sidebar on right *//*
-
-    gap: 20px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+.submit-button:disabled {
+    transform: none;
+    box-shadow: none;
 }
-
-*/
-/* Make sure the login/cards look like distinct "modules" *//*
-
-.card-container, .login-container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-}*/

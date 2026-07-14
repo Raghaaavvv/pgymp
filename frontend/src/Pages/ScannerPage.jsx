@@ -22,14 +22,15 @@ function ScannerPage() {
         },
         title: {
             fontSize: '28px',
-            fontWeight: 'bold',
+            fontWeight: '700',
             color: 'rgb(181, 68, 68)',
-            marginBottom: '10px',
-            textAlign: 'center'
+            marginBottom: '8px',
+            textAlign: 'center',
+            letterSpacing: '-0.02em'
         },
         subtitle: {
-            fontSize: '16px',
-            color: '#666',
+            fontSize: '15px',
+            color: '#777',
             marginBottom: '30px',
             textAlign: 'center'
         },
@@ -37,27 +38,32 @@ function ScannerPage() {
             width: '100%',
             maxWidth: '400px',
             backgroundColor: '#ffffff',
-            borderRadius: '12px',
+            borderRadius: '16px',
             padding: '30px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #f0f0f0'
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 10px 28px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #f0f0f0',
+            animation: 'scannerCardIn 0.35s ease both'
         },
         cameraToggleBtn: {
             width: '100%',
-            padding: '12px',
+            padding: '13px',
             backgroundColor: useCamera ? '#666' : 'rgb(181, 68, 68)',
             color: '#ffffff',
             border: 'none',
-            borderRadius: '8px',
+            borderRadius: '10px',
             fontSize: '16px',
+            fontWeight: '600',
             cursor: 'pointer',
-            marginBottom: '20px'
+            marginBottom: '20px',
+            transition: 'filter 0.2s ease, transform 0.15s ease'
         },
         cameraContainer: {
             width: '100%',
             marginBottom: '20px',
-            borderRadius: '8px',
-            overflow: 'hidden'
+            borderRadius: '12px',
+            overflow: 'hidden',
+            animation: 'scannerCardIn 0.3s ease both',
+            border: '2px solid rgb(181, 68, 68)'
         },
         divider: {
             display: 'flex',
@@ -68,71 +74,146 @@ function ScannerPage() {
         dividerLine: {
             flex: 1,
             height: '1px',
-            backgroundColor: '#e0e0e0'
+            backgroundColor: '#e5e5e5'
         },
         dividerText: {
-            color: '#888',
-            fontSize: '14px'
+            color: '#999',
+            fontSize: '13px'
         },
         input: {
             width: '100%',
-            padding: '12px',
-            borderRadius: '8px',
-            border: '1px solid #e0e0e0',
+            padding: '13px',
+            borderRadius: '10px',
+            border: '2px solid #e5e5e5',
             fontSize: '14px',
-            marginBottom: '15px',
-            boxSizing: 'border-box'
+            marginBottom: '16px',
+            boxSizing: 'border-box',
+            transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+            outline: 'none'
         },
         submitBtn: {
             width: '100%',
-            padding: '12px',
+            padding: '13px',
             backgroundColor: 'rgb(181, 68, 68)',
             color: '#ffffff',
             border: 'none',
-            borderRadius: '8px',
+            borderRadius: '10px',
             fontSize: '16px',
+            fontWeight: '600',
             cursor: isLoading ? 'not-allowed' : 'pointer',
-            opacity: isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
+            transition: 'filter 0.2s ease, transform 0.15s ease'
         },
         message: {
             marginTop: '20px',
             padding: '15px',
-            borderRadius: '8px',
+            borderRadius: '10px',
             textAlign: 'center',
             fontSize: '16px',
-            fontWeight: 'bold',
+            fontWeight: '600',
             backgroundColor: isSuccess ? '#e6f4ea' : '#fce8e8',
             color: isSuccess ? '#2d7a3a' : 'rgb(181, 68, 68)',
-            border: `1px solid ${isSuccess ? '#a8d5b0' : '#f5c0c0'}`
+            border: `1px solid ${isSuccess ? '#a8d5b0' : '#f5c0c0'}`,
+            animation: 'scannerMessageIn 0.3s ease both'
         }
     };
 
     const handleAdminLogin = () => {
-            if (adminPassword === "abc") {  // Simple hardcoded password
-                setIsAuthenticated(true);
-            } else {
-                setError("Incorrect password!");
-            }
-        };
+        if (adminPassword === "abc") {  // Simple hardcoded password
+            setIsAuthenticated(true);
+        } else {
+            setError("Incorrect password!");
+        }
+    };
 
-        if (!isAuthenticated) {
-            return (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px' }}>
-                    <h2>Security Staff Access Only</h2>
+    if (!isAuthenticated) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                padding: '40px',
+                backgroundColor: '#f9f9f9'
+            }}>
+                <div style={{
+                    width: '100%',
+                    maxWidth: '360px',
+                    backgroundColor: '#ffffff',
+                    borderRadius: '16px',
+                    padding: '32px',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 10px 28px rgba(0, 0, 0, 0.05)',
+                    border: '1px solid #f0f0f0',
+                    textAlign: 'center',
+                    animation: 'scannerCardIn 0.35s ease both',
+                    marginTop: '-400px'
+
+                }}>
+                    <h2 style={{ color: 'rgb(181, 68, 68)', marginBottom: '18px', fontWeight: 700 }}>
+                        Security Staff Access Only
+                    </h2>
                     <input
                         type="password"
                         placeholder="Enter staff password"
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
-                        style={{ padding: '8px', margin: '10px' }}
+                        onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
+                        style={{
+                            padding: '12px',
+                            marginBottom: '14px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            borderRadius: '10px',
+                            border: '2px solid #e5e5e5',
+                            fontSize: '14px',
+                            outline: 'none',
+                            transition: 'border-color 0.25s ease'
+                        }}
                     />
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <button onClick={handleAdminLogin}>
+                    {error && (
+                        <p style={{
+                            color: 'rgb(181, 68, 68)',
+                            fontSize: '14px',
+                            marginBottom: '12px',
+                            animation: 'scannerMessageIn 0.25s ease both'
+                        }}>
+                            {error}
+                        </p>
+                    )}
+                    <button
+                        onClick={handleAdminLogin}
+                        style={{
+                            width: '100%',
+                            padding: '12px',
+                            backgroundColor: 'rgb(181, 68, 68)',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '10px',
+                            fontSize: '15px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'filter 0.2s ease, transform 0.15s ease'
+                        }}
+                        onMouseDown={(e) => e.currentTarget.style.transform = 'translateY(1px)'}
+                        onMouseUp={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                    >
                         Access Scanner
                     </button>
                 </div>
-            );
-        }
+                <style>{`
+                    @keyframes scannerCardIn {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    @keyframes scannerMessageIn {
+                        from { opacity: 0; transform: translateY(-4px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                `}</style>
+            </div>
+        );
+    }
 
     const sendTokenToBackend = async (scannedToken) => {
         if (!scannedToken) {
@@ -200,6 +281,8 @@ function ScannerPage() {
                         setUseCamera(!useCamera);
                         setMessage("");
                     }}
+                    onMouseOver={(e) => e.currentTarget.style.filter = 'brightness(0.92)'}
+                    onMouseOut={(e) => e.currentTarget.style.filter = 'none'}
                 >
                     {useCamera ? "Turn Off Camera" : "Scan QR Code with Camera"}
                 </button>
@@ -210,7 +293,7 @@ function ScannerPage() {
                         <QrScanner
                             onScan={handleScan}
                             onError={handleError}
-                            style={{ width: '100%' }}
+                            style={{ width: '100%', display: 'block' }}
                             constraints={{
                                 video: { facingMode: "environment" } // Use back camera on phone
                             }}
@@ -232,6 +315,14 @@ function ScannerPage() {
                     placeholder="Paste or type token here"
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
+                    onFocus={(e) => {
+                        e.currentTarget.style.borderColor = 'rgb(60, 153, 128)';
+                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(60, 153, 128, 0.15)';
+                    }}
+                    onBlur={(e) => {
+                        e.currentTarget.style.borderColor = '#e5e5e5';
+                        e.currentTarget.style.boxShadow = 'none';
+                    }}
                 />
 
                 {/* Submit Button */}
@@ -239,6 +330,8 @@ function ScannerPage() {
                     style={styles.submitBtn}
                     onClick={handleManualSubmit}
                     disabled={isLoading}
+                    onMouseOver={(e) => !isLoading && (e.currentTarget.style.filter = 'brightness(0.92)')}
+                    onMouseOut={(e) => e.currentTarget.style.filter = 'none'}
                 >
                     {isLoading ? "Checking In..." : "Check In"}
                 </button>
@@ -250,6 +343,17 @@ function ScannerPage() {
                     </div>
                 )}
             </div>
+
+            <style>{`
+                @keyframes scannerCardIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes scannerMessageIn {
+                    from { opacity: 0; transform: translateY(-4px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
         </div>
     );
 }
