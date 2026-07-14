@@ -22,6 +22,7 @@ import dumbellImg from './assets/dumbell.png'
 import ellipticalImg from './assets/elliptical.png'
 import legPressImg from './assets/leg_press.png'
 import treadmillImg from './assets/treadmill.png'
+import ScannerPage from './Pages/ScannerPage'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
@@ -157,75 +158,71 @@ function App() {
             </>
             );
         }
-
-    if ( currentPage === "home" ) {
-          return(
+    if (currentPage === "scanner") {
+        return (
             <>
-              <Header setCurrentPage={setCurrentPage} />
-
-              <div className= "card-container">
-                  <Card />
-              </div>
-              <div className= "login-container">
-
-        {/* if statment of jsx*/}
-              {authStep < 4 ?
-              (<AuthFlow authStep={authStep} setAuthStep={setAuthStep} userId={userId} setUserId={setUserId}
-                    fetchCapacity={fetchCapacity} fetchEquipment={fetchEquipment} setToken={setToken}
-                    equipmentData={equipmentData} />) :
-              (
-                <div className="card1 success-card">
-                    <h2 className="card-title">Welcome to PGymP!</h2>
-                    <p className="card-text">Scan this at the security desk.</p>
-
-                    <div className="qr-wrapper">
-                      <QRCodeCanvas value={qrCodeData} size={160} level="H" />
-                    </div>
-
-                    <button onClick={handleCheckout} className="checkout-btn">
-                      Check Out (Log Out)
-                    </button>
-                </div>
-              )}
-
-              </div>
-              <GymCapacityBox currentCapacity={currentCapacity} maxCapacity={maxCapacity} />
-              <Gymequipment equipment={equipmentData} />
-              <Footer />
-
-
-
-
-
-
-
-
-
-          {/*<Student name = "soma" block={30} isResident={true} />
-          <Student/>
-          <Counter />
-          <ToDoList />
-          <DynamicWindow />
-           <DigitalClock/> */}
-
-
-
-          </>
-
-      );
+                <Header setCurrentPage={setCurrentPage} />
+                <ScannerPage />
+                <Footer />
+            </>
+        );
     }
 
-}
-/*Student.propTypes = {
-  name: PropTypes.string.isRequired,
-  block: PropTypes.number.isRequired,
-  isResident: PropTypes.bool.isRequired
-};
+    if (currentPage === "home") {
+            return (
+                <>
+                    <Header setCurrentPage={setCurrentPage} />
 
-Student.defaultProps = {
-  name: "Admin",
-  block: 67,
-  isResident: true
-}; */ //these not working???
+                    <div className="card-container">
+                        <Card />
+                    </div>
 
-export default App
+                    <div className="login-container">
+                        {/* if statement of jsx*/}
+                        {authStep < 4 ? (
+                            <AuthFlow
+                                authStep={authStep}
+                                setAuthStep={setAuthStep}
+                                userId={userId}
+                                setUserId={setUserId}
+                                fetchCapacity={fetchCapacity}
+                                fetchEquipment={fetchEquipment}
+                                setToken={setToken}
+                                equipmentData={equipmentData}
+                            />
+                        ) : (
+                            <div className="card1 success-card">
+                                <h2 className="card-title">Welcome to PGymP!</h2>
+                                <p className="card-text">Scan this at the security desk.</p>
+
+                                <div className="qr-wrapper">
+                                    <QRCodeCanvas value={qrCodeData} size={160} level="H" />
+                                </div>
+
+                                <button onClick={handleCheckout} className="checkout-btn">
+                                    Check Out (Log Out)
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <GymCapacityBox currentCapacity={currentCapacity} maxCapacity={maxCapacity} />
+                    <Gymequipment equipment={equipmentData} />
+                    <Footer />
+                </>
+            );
+        }
+    } 
+
+    export default App;
+
+
+
+
+
+
+
+
+
+
+

@@ -17,6 +17,7 @@ function Header({ setCurrentPage} ) {
                     <li><a href="#" onClick={() => setCurrentPage("about")}>About</a></li>
                     <li><a href="#" onClick={() => setCurrentPage("contact")}>Contact</a></li>
                     <li><a href="#" onClick={() => setCurrentPage("feedback")}>Feedback</a></li>
+                    <li><a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage("scanner"); }}>Scanner</a></li>
                 </ul>
             </nav>
             <hr></hr>
