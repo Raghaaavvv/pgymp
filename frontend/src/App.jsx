@@ -9,6 +9,7 @@ import GymCapacityBox from './GymCapacityBox'
 import AboutPage from './Pages/AboutPage'
 import ContactPage from './Pages/ContactPage'
 import FeedbackPage from './Pages/FeedbackPage'
+import InfographicPage from './Pages/InfographicPage'
 import backMachineImg from './assets/back_machine.png'
 import barbellImg from './assets/barbell.png'
 import benchImg from './assets/benchpress.png'
@@ -162,6 +163,16 @@ function App() {
         );
     }
 
+    if (currentPage === "infographic") {
+        return (
+            <>
+                <Header setCurrentPage={setCurrentPage} />
+                <InfographicPage />
+                <Footer />
+            </>
+        );
+    }
+
     if (currentPage === "home") {
             return (
                 <>
@@ -209,14 +220,3 @@ function App() {
     }
 
     export default App;
-
-
-
-
-
-
-
-
-
-
-

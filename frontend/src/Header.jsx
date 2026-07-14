@@ -5,6 +5,7 @@ function Header({ setCurrentPage }) {
         { label: 'Contact', page: 'contact' },
         { label: 'Feedback', page: 'feedback' },
         { label: 'Scanner', page: 'scanner' },
+        { label: 'Muscle Map', page: 'infographic' },
     ];
 
     return (
