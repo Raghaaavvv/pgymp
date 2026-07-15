@@ -68,7 +68,7 @@ function HeatmapPage({ setCurrentPage }) {
 
     return (
         <div className="widgetContainer heatmap-fade-in" style={{ padding: '20px 12px 50px' }}>
-            <h1 className="titleHeader">Peak Hours Heatmap</h1>
+            <h1 className="titleHeader">Peak Hours Heat Map</h1>
             <p style={{
                 textAlign: 'center',
                 color: '#777',
