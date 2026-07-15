@@ -10,6 +10,7 @@ function Header({ setCurrentPage }) {
         { label: 'Feedback', page: 'feedback' },
         { label: 'Scanner', page: 'scanner' },
         { label: 'Muscle Map', page: 'infographic' },
+        { label: 'HeatMap', page: 'heatmap' },
     ];
 
     const handleNavClick = (page) => {

@@ -18,6 +18,7 @@ import ellipticalImg from './assets/elliptical.png'
 import legPressImg from './assets/leg_press.png'
 import treadmillImg from './assets/treadmill.png'
 import ScannerPage from './Pages/ScannerPage'
+import HeatmapPage from './Pages/HeatmapPage'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
@@ -172,6 +173,16 @@ function App() {
             </>
         );
     }
+
+    if (currentPage === "heatmap") {
+            return (
+                <>
+                    <Header setCurrentPage={setCurrentPage} />
+                    <HeatmapPage />
+                    <Footer />
+                </>
+            );
+        }
 
     if (currentPage === "home") {
             return (
