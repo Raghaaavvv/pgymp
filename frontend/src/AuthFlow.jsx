@@ -33,20 +33,49 @@ function FocusableInput(props) {
 
 function FocusableSelect(props) {
     return (
-        <select
-            {...props}
-            style={{ ...inputStyle, ...(props.style || {}), cursor: 'pointer' }}
-            onFocus={(e) => {
-                e.currentTarget.style.borderColor = 'rgb(60, 153, 128)';
-                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(60, 153, 128, 0.15)';
-            }}
-            onBlur={(e) => {
-                e.currentTarget.style.borderColor = '#e5e5e5';
-                e.currentTarget.style.boxShadow = 'none';
-            }}
-        >
-            {props.children}
-        </select>
+        <div style={{ position: 'relative', width: '100%' }}>
+            <select
+                {...props}
+                style={{
+                    ...inputStyle,
+                    ...(props.style || {}),
+                    cursor: 'pointer',
+                    appearance: 'none',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    paddingRight: '36px',
+                }}
+                onFocus={(e) => {
+                    e.currentTarget.style.borderColor = 'rgb(60, 153, 128)';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(60, 153, 128, 0.15)';
+                }}
+                onBlur={(e) => {
+                    e.currentTarget.style.borderColor = '#e5e5e5';
+                    e.currentTarget.style.boxShadow = 'none';
+                }}
+            >
+                {props.children}
+            </select>
+            <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgb(60, 153, 128)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                    position: 'absolute',
+                    right: '14px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none',
+                }}
+            >
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </div>
     );
 }
 
@@ -58,6 +87,70 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
     const availableEquipment = Array.isArray(equipmentData) ? equipmentData : [];
     const [queuePosition, setQueuePosition] = useState(null);
     const [inQueue, setInQueue] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [phoneError, setPhoneError] = useState("");
+    const [blockNumber, setBlockNumber] = useState("");
+    const [roomNumber, setRoomNumber] = useState("");
+    const [blockError, setBlockError] = useState("");
+    const [roomError, setRoomError] = useState("");
+
+    const SG_PHONE_REGEX = /^[689]\d{7}$/;
+    const BLOCK_REGEX = /^\d{2}$/;
+    const ROOM_REGEX = /^[A-Za-z]$/;
+
+    const validatePhoneNumber = (value) => {
+        if (!SG_PHONE_REGEX.test(value)) {
+            setPhoneError("Please enter a valid SG phone number (8 digits, starting with 6, 8, or 9).");
+            return false;
+        }
+        setPhoneError("");
+        return true;
+    };
+
+    const validateBlockNumber = (value) => {
+        if (!BLOCK_REGEX.test(value)) {
+            setBlockError("Block number must be exactly 2 digits.");
+            return false;
+        }
+        setBlockError("");
+        return true;
+    };
+
+    const validateRoomNumber = (value) => {
+        if (!ROOM_REGEX.test(value)) {
+            setRoomError("Room number must be a single letter.");
+            return false;
+        }
+        setRoomError("");
+        return true;
+    };
+
+    const handlePhoneChange = (e) => {
+        // keep digits only, cap at 8 digits as the user types
+        const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 8);
+        setPhoneNumber(digitsOnly);
+        if (phoneError) {
+            setPhoneError("");
+        }
+    };
+
+    const handleBlockChange = (e) => {
+        // keep digits only, cap at 2 digits as the user types
+        const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 2);
+        setBlockNumber(digitsOnly);
+        if (blockError) {
+            setBlockError("");
+        }
+    };
+
+    const handleRoomChange = (e) => {
+        // keep a single letter only as the user types
+        const letterOnly = e.target.value.replace(/[^A-Za-z]/g, '').slice(0, 1).toUpperCase();
+        setRoomNumber(letterOnly);
+        if (roomError) {
+            setRoomError("");
+        }
+    };
 
     useEffect(() => {
         if (!inQueue) return; //
@@ -223,6 +316,12 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
+                            const isBlockValid = validateBlockNumber(blockNumber);
+                            const isRoomValid = validateRoomNumber(roomNumber);
+                            const isPhoneValid = validatePhoneNumber(phoneNumber);
+                            if (!isBlockValid || !isRoomValid || !isPhoneValid) {
+                                return;
+                            }
                             setAuthStep(3);
                         }}
                         style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '20px' }}
@@ -234,10 +333,54 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
                             <option value="helix">Helix House</option>
                             <option value="pgpr">PGPR House</option>
                         </FocusableSelect>
-                        <FocusableInput type="number" placeholder="Block Number" min="1" required />
+                        <div>
+                            <FocusableInput
+                                type="text"
+                                placeholder="Block Number (e.g., 06)"
+                                value={blockNumber}
+                                onChange={handleBlockChange}
+                                onBlur={() => blockNumber && validateBlockNumber(blockNumber)}
+                                inputMode="numeric"
+                                maxLength={2}
+                                required
+                                style={blockError ? { borderColor: 'rgb(181, 68, 68)' } : {}}
+                            />
+                            {blockError && (
+                                <p style={{ ...errorStyle, marginTop: '8px', marginBottom: 0 }}>{blockError}</p>
+                            )}
+                        </div>
                         <FocusableInput type="text" placeholder="Level (e.g., 4)" required />
-                        <FocusableInput type="text" placeholder="Room Number" required />
-                        <FocusableInput type="tel" placeholder="Phone Number" required />
+                        <div>
+                            <FocusableInput
+                                type="text"
+                                placeholder="Room Letter (e.g., A)"
+                                value={roomNumber}
+                                onChange={handleRoomChange}
+                                onBlur={() => roomNumber && validateRoomNumber(roomNumber)}
+                                maxLength={1}
+                                required
+                                style={roomError ? { borderColor: 'rgb(181, 68, 68)' } : {}}
+                            />
+                            {roomError && (
+                                <p style={{ ...errorStyle, marginTop: '8px', marginBottom: 0 }}>{roomError}</p>
+                            )}
+                        </div>
+                        <div>
+                            <FocusableInput
+                                type="tel"
+                                placeholder="Phone Number (e.g., 91234567)"
+                                value={phoneNumber}
+                                onChange={handlePhoneChange}
+                                onBlur={() => phoneNumber && validatePhoneNumber(phoneNumber)}
+                                inputMode="numeric"
+                                maxLength={8}
+                                required
+                                style={phoneError ? { borderColor: 'rgb(181, 68, 68)' } : {}}
+                            />
+                            {phoneError && (
+                                <p style={{ ...errorStyle, marginTop: '8px', marginBottom: 0 }}>{phoneError}</p>
+                            )}
+                        </div>
                         <button type="submit" className="login-btn">Confirm & Enter</button>
                     </form>
                 </div>
