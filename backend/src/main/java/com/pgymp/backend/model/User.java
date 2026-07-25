@@ -3,10 +3,8 @@ package com.pgymp.backend.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "users")
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +22,16 @@ public class User {
     @Column
     private LocalDateTime lastCheckedIn;
 
+    @Column(unique = true)
+    private String token;   // NEW
+
     public User(String matricId, String password) {
         this.matricId = matricId;
         this.password = password;
         this.checkedIn = false;
-
     }
 
     public User() {
-
     }
 
     public String getMatricId() {
@@ -55,14 +54,12 @@ public class User {
         return this.checkedIn;
     }
 
-    public void setCheckedIn(boolean checkedIn)  {
+    public void setCheckedIn(boolean checkedIn) {
         this.checkedIn = checkedIn;
         if (checkedIn) {
             this.lastCheckedIn = LocalDateTime.now();
         }
     }
-
-
 
     public String getStatus() {
         if (checkedIn) {
@@ -75,7 +72,12 @@ public class User {
         return this.id;
     }
 
+    // NEW
+    public String getToken() {
+        return this.token;
+    }
 
-
-
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

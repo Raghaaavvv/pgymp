@@ -61,4 +61,14 @@ public class AuthController {
         return equipmentService.getEquipmentByUser(userId);
     }
 
+    @GetMapping("/queueStatus")
+    public QueueStatusResponse getQueueStatus(@RequestParam String matricId) {
+        return userService.getQueueStatus(matricId);
+    }
+
+    @PostMapping("/scan")
+    public ScanResponse scan(@RequestBody ScanRequest request) {
+        return userService.scan(request.getToken());
+    }
+
 }

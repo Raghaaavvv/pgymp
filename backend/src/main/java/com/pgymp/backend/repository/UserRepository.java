@@ -17,7 +17,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     long countByCheckedInFalse();
 
-    //TODO some weird database tracking -learn after Milestone2
-
-
+    Optional<User> findByToken(String token);   // NEW
 }
