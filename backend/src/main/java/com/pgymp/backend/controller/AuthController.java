@@ -3,6 +3,7 @@ package com.pgymp.backend.controller;
 import com.pgymp.backend.dto.*;
 import com.pgymp.backend.service.CapacityService;
 import com.pgymp.backend.service.EquipmentService;
+import com.pgymp.backend.service.HeatmapService;
 import com.pgymp.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class AuthController {
 
     @Autowired
     private EquipmentService equipmentService;
+
+    @Autowired
+    private HeatmapService heatmapService;
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
@@ -69,6 +73,11 @@ public class AuthController {
     @PostMapping("/scan")
     public ScanResponse scan(@RequestBody ScanRequest request) {
         return userService.scan(request.getToken());
+    }
+
+    @GetMapping("/heatmap")
+    public List<HeatmapEntry> getHeatmap() {
+        return heatmapService.getHeatmap();
     }
 
 }

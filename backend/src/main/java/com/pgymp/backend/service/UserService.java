@@ -3,6 +3,9 @@ package com.pgymp.backend.service;
 import com.pgymp.backend.dto.*;
 import com.pgymp.backend.model.User;
 import com.pgymp.backend.repository.UserRepository;
+import com.pgymp.backend.model.CheckInLog;
+import com.pgymp.backend.repository.CheckInLogRepository;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
