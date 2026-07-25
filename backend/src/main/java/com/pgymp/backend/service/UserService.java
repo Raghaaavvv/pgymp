@@ -14,6 +14,8 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+    private static final int MAX_CAPACITY = 20;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -41,7 +43,7 @@ public class UserService {
         if (user.getToken() != null) {
             return new LoginResponse(true, "Welcome back - scan your QR code at the gym entrance", user.getId(), user.getToken());
         }
-        if (capacityService.getCurrentCount() >= 1) {
+        if (capacityService.getCurrentCount() >= MAX_CAPACITY) {
             int queuePosition = qService.joinQ(user.getMatricId());
             return new LoginResponse(false, "Gym is at full capacity. You are number " + queuePosition + " in the queue.", null, null);
         }
@@ -55,13 +57,18 @@ public class UserService {
         return new LoginResponse(true, "Login successful", user.getId(), token);
     }
 
-    public RegisterResponse register(String matricId, String password) {
+    public LoginResponse register(String matricId, String password) {
+        if (matricId == null || matricId.isBlank() || password == null || password.isBlank()) {
+            return new LoginResponse(false, "Matric ID and password are required", null, null);
+        }
+
+        matricId = matricId.trim();
         if (userRepository.existsByMatricId(matricId)) {
-            return new RegisterResponse(false, "matricId already exists");
+            return new LoginResponse(false, "Matric ID already exists - please sign in", null, null);
         }
         User user = new User(matricId, password);
         userRepository.save(user);
-        return new RegisterResponse(true, "Registration successful");
+        return login(matricId, password);
     }
 
     // NEW - called by the security guard scanner page.

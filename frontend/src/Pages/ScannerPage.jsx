@@ -1,15 +1,141 @@
-import { useState } from 'react';
-import QrScanner from 'react-qr-scanner';
+import { useEffect, useRef, useState } from 'react';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 function ScannerPage() {
     const [token, setToken] = useState("");
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(null);
     const [useCamera, setUseCamera] = useState(false);
+    const [cameraMessage, setCameraMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [adminPassword, setAdminPassword] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [error, setError] = useState("");
+    const videoRef = useRef(null);
+
+    const sendTokenToBackend = async (scannedToken) => {
+        if (!scannedToken) {
+            setMessage("Please enter or scan a token!");
+            setIsSuccess(false);
+            return;
+        }
+
+        setIsLoading(true);
+        setMessage("");
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/scan`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: scannedToken })
+            });
+
+            const data = await response.json();
+
+            if (data.status) {
+                setIsSuccess(true);
+                setMessage("Check In Successful!");
+                setToken("");
+            } else {
+                setIsSuccess(false);
+                setMessage(data.message);
+            }
+        } catch (error) {
+            console.error("Scan error:", error);
+            setIsSuccess(false);
+            setMessage("Cannot connect to server. Please try again.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!useCamera || !isAuthenticated) return undefined;
+
+        let stream = null;
+        let animationFrameId = null;
+        let isActive = true;
+
+        const startCameraScanner = async () => {
+            if (!("BarcodeDetector" in window)) {
+                setCameraMessage("Camera scanning is not supported in this browser. Please enter the token manually.");
+                return;
+            }
+
+            if (!navigator.mediaDevices?.getUserMedia) {
+                setCameraMessage("Camera access is not available. Please enter the token manually.");
+                return;
+            }
+
+            try {
+                const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { ideal: "environment" } }
+                });
+
+                if (!isActive || !videoRef.current) {
+                    stream.getTracks().forEach((track) => track.stop());
+                    return;
+                }
+
+                videoRef.current.srcObject = stream;
+                await videoRef.current.play();
+                setCameraMessage("Point the camera at the resident QR code.");
+
+                const scanFrame = async () => {
+                    if (!isActive || !videoRef.current) return;
+
+                    try {
+                        const codes = await detector.detect(videoRef.current);
+                        const scannedToken = codes[0]?.rawValue;
+                        if (scannedToken) {
+                            setToken(scannedToken);
+                            setUseCamera(false);
+                            sendTokenToBackend(scannedToken);
+                            return;
+                        }
+                    } catch (error) {
+                        console.error("QR detection error:", error);
+                    }
+
+                    animationFrameId = requestAnimationFrame(scanFrame);
+                };
+
+                animationFrameId = requestAnimationFrame(scanFrame);
+            } catch (error) {
+                console.error("Camera error:", error);
+                setCameraMessage("Camera error. Please enter the token manually.");
+            }
+        };
+
+        startCameraScanner();
+
+        return () => {
+            isActive = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            if (stream) {
+                stream.getTracks().forEach((track) => track.stop());
+            }
+        };
+    }, [useCamera, isAuthenticated]);
+
+    const handleAdminLogin = () => {
+        if (adminPassword === "abc") {
+            setIsAuthenticated(true);
+            setError("");
+        } else {
+            setError("Incorrect password!");
+        }
+    };
+
+    const handleCameraToggle = () => {
+        setUseCamera(!useCamera);
+        setCameraMessage("");
+        setMessage("");
+    };
 
     const styles = {
         container: {
@@ -25,8 +151,7 @@ function ScannerPage() {
             fontWeight: '700',
             color: 'rgb(181, 68, 68)',
             marginBottom: '8px',
-            textAlign: 'center',
-            letterSpacing: '-0.02em'
+            textAlign: 'center'
         },
         subtitle: {
             fontSize: '15px',
@@ -54,16 +179,21 @@ function ScannerPage() {
             fontSize: '16px',
             fontWeight: '600',
             cursor: 'pointer',
-            marginBottom: '20px',
-            transition: 'filter 0.2s ease, transform 0.15s ease'
+            marginBottom: '20px'
         },
         cameraContainer: {
             width: '100%',
             marginBottom: '20px',
             borderRadius: '12px',
             overflow: 'hidden',
-            animation: 'scannerCardIn 0.3s ease both',
             border: '2px solid rgb(181, 68, 68)'
+        },
+        cameraMessage: {
+            padding: '12px',
+            color: '#777',
+            fontSize: '14px',
+            textAlign: 'center',
+            backgroundColor: '#f7f7f7'
         },
         divider: {
             display: 'flex',
@@ -88,7 +218,6 @@ function ScannerPage() {
             fontSize: '14px',
             marginBottom: '16px',
             boxSizing: 'border-box',
-            transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
             outline: 'none'
         },
         submitBtn: {
@@ -101,8 +230,7 @@ function ScannerPage() {
             fontSize: '16px',
             fontWeight: '600',
             cursor: isLoading ? 'not-allowed' : 'pointer',
-            opacity: isLoading ? 0.7 : 1,
-            transition: 'filter 0.2s ease, transform 0.15s ease'
+            opacity: isLoading ? 0.7 : 1
         },
         message: {
             marginTop: '20px',
@@ -113,43 +241,14 @@ function ScannerPage() {
             fontWeight: '600',
             backgroundColor: isSuccess ? '#e6f4ea' : '#fce8e8',
             color: isSuccess ? '#2d7a3a' : 'rgb(181, 68, 68)',
-            border: `1px solid ${isSuccess ? '#a8d5b0' : '#f5c0c0'}`,
-            animation: 'scannerMessageIn 0.3s ease both'
-        }
-    };
-
-    const handleAdminLogin = () => {
-        if (adminPassword === "abc") {  // Simple hardcoded password
-            setIsAuthenticated(true);
-        } else {
-            setError("Incorrect password!");
+            border: `1px solid ${isSuccess ? '#a8d5b0' : '#f5c0c0'}`
         }
     };
 
     if (!isAuthenticated) {
         return (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '100vh',
-                padding: '40px',
-                backgroundColor: '#f9f9f9'
-            }}>
-                <div style={{
-                    width: '100%',
-                    maxWidth: '360px',
-                    backgroundColor: '#ffffff',
-                    borderRadius: '16px',
-                    padding: '32px',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 10px 28px rgba(0, 0, 0, 0.05)',
-                    border: '1px solid #f0f0f0',
-                    textAlign: 'center',
-                    animation: 'scannerCardIn 0.35s ease both',
-                    marginTop: '-400px'
-
-                }}>
+            <div style={{ ...styles.container, justifyContent: 'center' }}>
+                <div style={{ ...styles.card, maxWidth: '360px', textAlign: 'center' }}>
                     <h2 style={{ color: 'rgb(181, 68, 68)', marginBottom: '18px', fontWeight: 700 }}>
                         Security Staff Access Only
                     </h2>
@@ -159,113 +258,16 @@ function ScannerPage() {
                         value={adminPassword}
                         onChange={(e) => setAdminPassword(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
-                        style={{
-                            padding: '12px',
-                            marginBottom: '14px',
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            borderRadius: '10px',
-                            border: '2px solid #e5e5e5',
-                            fontSize: '14px',
-                            outline: 'none',
-                            transition: 'border-color 0.25s ease'
-                        }}
+                        style={styles.input}
                     />
-                    {error && (
-                        <p style={{
-                            color: 'rgb(181, 68, 68)',
-                            fontSize: '14px',
-                            marginBottom: '12px',
-                            animation: 'scannerMessageIn 0.25s ease both'
-                        }}>
-                            {error}
-                        </p>
-                    )}
-                    <button
-                        onClick={handleAdminLogin}
-                        style={{
-                            width: '100%',
-                            padding: '12px',
-                            backgroundColor: 'rgb(181, 68, 68)',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '10px',
-                            fontSize: '15px',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            transition: 'filter 0.2s ease, transform 0.15s ease'
-                        }}
-                        onMouseDown={(e) => e.currentTarget.style.transform = 'translateY(1px)'}
-                        onMouseUp={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                    >
+                    {error && <p style={{ color: 'rgb(181, 68, 68)', fontSize: '14px' }}>{error}</p>}
+                    <button onClick={handleAdminLogin} style={styles.submitBtn}>
                         Access Scanner
                     </button>
                 </div>
-                <style>{`
-                    @keyframes scannerCardIn {
-                        from { opacity: 0; transform: translateY(10px); }
-                        to { opacity: 1; transform: translateY(0); }
-                    }
-                    @keyframes scannerMessageIn {
-                        from { opacity: 0; transform: translateY(-4px); }
-                        to { opacity: 1; transform: translateY(0); }
-                    }
-                `}</style>
             </div>
         );
     }
-
-    const sendTokenToBackend = async (scannedToken) => {
-        if (!scannedToken) {
-            setMessage("Please enter or scan a token!");
-            setIsSuccess(false);
-            return;
-        }
-
-        setIsLoading(true);
-        setMessage("");
-
-        try {
-            const response = await fetch("http://localhost:8080/api/auth/scan", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: scannedToken })
-            });
-
-            const data = await response.json();
-
-            if (data.status) {
-                setIsSuccess(true);
-                setMessage("✓ Check In Successful!");
-                setToken(""); // Clear input after success
-            } else {
-                setIsSuccess(false);
-                setMessage(`✗ ${data.message}`);
-            }
-        } catch (error) {
-            console.error("Scan error:", error);
-            setIsSuccess(false);
-            setMessage("Cannot connect to server. Please try again.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleScan = (data) => {
-        if (data && data.text) {
-            sendTokenToBackend(data.text);
-        }
-    };
-
-    const handleError = (error) => {
-        console.error("Camera error:", error);
-        setIsSuccess(false);
-        setMessage("Camera error. Please use manual input instead.");
-    };
-
-    const handleManualSubmit = () => {
-        sendTokenToBackend(token);
-    };
 
     return (
         <div style={styles.container}>
@@ -273,84 +275,53 @@ function ScannerPage() {
             <p style={styles.subtitle}>Scan resident QR code to check them in</p>
 
             <div style={styles.card}>
-
-                {/* Camera Toggle Button */}
                 <button
                     style={styles.cameraToggleBtn}
-                    onClick={() => {
-                        setUseCamera(!useCamera);
-                        setMessage("");
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.filter = 'brightness(0.92)'}
-                    onMouseOut={(e) => e.currentTarget.style.filter = 'none'}
+                    onClick={handleCameraToggle}
                 >
                     {useCamera ? "Turn Off Camera" : "Scan QR Code with Camera"}
                 </button>
 
-                {/* Camera View */}
                 {useCamera && (
                     <div style={styles.cameraContainer}>
-                        <QrScanner
-                            onScan={handleScan}
-                            onError={handleError}
-                            style={{ width: '100%', display: 'block' }}
-                            constraints={{
-                                video: { facingMode: "environment" } // Use back camera on phone
-                            }}
+                        <video
+                            ref={videoRef}
+                            playsInline
+                            muted
+                            style={{ width: '100%', display: 'block', backgroundColor: '#111' }}
                         />
+                        {cameraMessage && <div style={styles.cameraMessage}>{cameraMessage}</div>}
                     </div>
                 )}
 
-                {/* Divider */}
                 <div style={styles.divider}>
                     <div style={styles.dividerLine}></div>
                     <span style={styles.dividerText}>OR enter token manually</span>
                     <div style={styles.dividerLine}></div>
                 </div>
 
-                {/* Manual Input */}
                 <input
                     style={styles.input}
                     type="text"
                     placeholder="Paste or type token here"
                     value={token}
                     onChange={(e) => setToken(e.target.value)}
-                    onFocus={(e) => {
-                        e.currentTarget.style.borderColor = 'rgb(60, 153, 128)';
-                        e.currentTarget.style.boxShadow = '0 0 0 3px rgba(60, 153, 128, 0.15)';
-                    }}
-                    onBlur={(e) => {
-                        e.currentTarget.style.borderColor = '#e5e5e5';
-                        e.currentTarget.style.boxShadow = 'none';
-                    }}
                 />
 
-                {/* Submit Button */}
                 <button
                     style={styles.submitBtn}
-                    onClick={handleManualSubmit}
+                    onClick={() => sendTokenToBackend(token)}
                     disabled={isLoading}
-                    onMouseOver={(e) => !isLoading && (e.currentTarget.style.filter = 'brightness(0.92)')}
-                    onMouseOut={(e) => e.currentTarget.style.filter = 'none'}
                 >
                     {isLoading ? "Checking In..." : "Check In"}
                 </button>
 
-                {/* Success/Error Message */}
-                {message && (
-                    <div style={styles.message}>
-                        {message}
-                    </div>
-                )}
+                {message && <div style={styles.message}>{message}</div>}
             </div>
 
             <style>{`
                 @keyframes scannerCardIn {
                     from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes scannerMessageIn {
-                    from { opacity: 0; transform: translateY(-4px); }
                     to { opacity: 1; transform: translateY(0); }
                 }
             `}</style>

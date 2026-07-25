@@ -9,14 +9,6 @@ public class CapacityService {
     @Autowired
     private UserRepository userRepository;
 
-    public long increment() {
-        return getCurrentCount();
-    }
-
-    public long decrement() {
-        return getCurrentCount();
-    }
-
     public long getCurrentCount() {
         return userRepository.countByCheckedInTrue();
     }

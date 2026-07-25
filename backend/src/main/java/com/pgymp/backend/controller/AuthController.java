@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+//THE CONTROLLER IS THE MIDDLEMAN BETWEEN FRONTEND AND BACKEND. it messgaes the frotnend
 
 @RestController          // Tells Spring this handles HTTP requests
 @RequestMapping("/api/auth")  // Base URL for all endpoints in this controller
@@ -33,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest request) {
+    public LoginResponse register(@RequestBody RegisterRequest request) {
         return userService.register(request.getMatricId(), request.getPassword());
     }
 
@@ -43,8 +44,8 @@ public class AuthController {
     }
 
     @GetMapping("/capacity")
-    public Capacity getCapacity() {
-        return new Capacity(capacityService.getCurrentCount());
+    public long getCapacity() {
+        return capacityService.getCurrentCount();
     }
 
     @GetMapping("/equipment")

@@ -136,6 +136,23 @@ header li a:hover::after {
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
+.auth-link-btn {
+  background: transparent;
+  border: none;
+  color: rgb(58, 103, 143);
+  cursor: pointer;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 2px 0;
+  text-align: center;
+}
+
+.auth-link-btn:hover {
+  color: rgb(60, 153, 128);
+  text-decoration: underline;
+}
+
 .equipment-list {
   list-style-type: none;
   padding: 60px;

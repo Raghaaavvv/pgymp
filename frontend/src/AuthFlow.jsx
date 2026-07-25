@@ -82,6 +82,10 @@ function FocusableSelect(props) {
 function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fetchEquipment, setToken, equipmentData }) {
     const [matricId, setMatricId] = useState("");
     const [password, setPassword] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [registerMatricId, setRegisterMatricId] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [selectedEquipment, setSelectedEquipment] = useState([]);
     const availableEquipment = Array.isArray(equipmentData) ? equipmentData : [];
@@ -157,7 +161,7 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
 
         const interval = setInterval(async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/auth/queueStatus?matricId=${matricId}`);
+                const response = await fetch(`${API_BASE_URL}/api/auth/queueStatus?matricId=${matricId}`);
                 const data = await response.json();
 
                 if (data.checkedIn) {
@@ -173,46 +177,84 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
         }, 10000);
 
         return () => clearInterval(interval);
-    }, [inQueue, matricId]);
+    }, [inQueue, matricId, setAuthStep]);
 
 
+
+    const handleAuthResult = (data, activeMatricId) => {
+        if (data.status) {
+            setUserId(data.id);
+            setToken(data.token);
+            setAuthStep(2);
+            fetchCapacity();
+            return;
+        }
+
+        if (data.message.includes("queue")) {
+            const position = data.message.match(/\d+/)?.[0];
+            setQueuePosition(position ? parseInt(position) : null);
+            setInQueue(true);
+            setMatricId(activeMatricId);
+            setAuthStep(5);
+            return;
+        }
+
+        setErrorMessage(data.message);
+    };
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage("");
 
+        const nextMatricId = matricId.trim();
+
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ matricId: matricId, password: password })
+                body: JSON.stringify({ matricId: nextMatricId, password: password })
             });
 
             const data = await response.json();
-
-            if (data.status) {
-                setUserId(data.id);
-                setToken(data.token);
-                setAuthStep(2);
-                fetchCapacity();
-            } else if (data.message.includes("queue")) {
-
-                const position = data.message.match(/\d+/)[0];
-                setQueuePosition(parseInt(position));
-                setInQueue(true);
-                setAuthStep(5);
-            } else {
-                setErrorMessage(data.message);
-            }
+            handleAuthResult(data, nextMatricId);
         } catch (error) {
             console.error("Error during login:", error);
             setErrorMessage("An error occurred. Please try again.");
         }
     };
 
+    const handleRegisterSubmit = async (e) => {
+        e.preventDefault();
+        setErrorMessage("");
+
+        const nextMatricId = registerMatricId.trim();
+        if (registerPassword !== confirmPassword) {
+            setErrorMessage("Passwords do not match.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ matricId: nextMatricId, password: registerPassword })
+            });
+
+            const data = await response.json();
+            if (data.status) {
+                setMatricId(nextMatricId);
+                setPassword(registerPassword);
+            }
+            handleAuthResult(data, nextMatricId);
+        } catch (error) {
+            console.error("Error during registration:", error);
+            setErrorMessage("An error occurred. Please try again.");
+        }
+    };
+
     const handleLeaveQueue = async () => {
         try {
-            await fetch("http://localhost:8080/api/queue/leave", {
+            await fetch(`${API_BASE_URL}/api/queue/leave`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ matricId: matricId })
@@ -274,25 +316,72 @@ function AuthFlow({ authStep, setAuthStep, userId, setUserId, fetchCapacity, fet
         return (
             <div className="card-container">
                 <div className="card1" style={stepAnim}>
-                    <h2 className="card-title">Sign In</h2>
+                    <h2 className="card-title">{isRegistering ? "Register" : "Sign In"}</h2>
                     {errorMessage && <p style={errorStyle}>{errorMessage}</p>}
-                    <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '20px' }}>
-                        <FocusableInput
-                            type="text"
-                            placeholder="NUS Matric ID"
-                            value={matricId}
-                            onChange={(e) => setMatricId(e.target.value)}
-                            required
-                        />
-                        <FocusableInput
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button type="submit" className="login-btn">Next</button>
-                    </form>
+                    {isRegistering ? (
+                        <form onSubmit={handleRegisterSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '20px' }}>
+                            <FocusableInput
+                                type="text"
+                                placeholder="NUS Matric ID"
+                                value={registerMatricId}
+                                onChange={(e) => setRegisterMatricId(e.target.value)}
+                                required
+                            />
+                            <FocusableInput
+                                type="password"
+                                placeholder="Password"
+                                value={registerPassword}
+                                onChange={(e) => setRegisterPassword(e.target.value)}
+                                required
+                            />
+                            <FocusableInput
+                                type="password"
+                                placeholder="Confirm Password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                            <button type="submit" className="login-btn">Register & Enter</button>
+                            <button
+                                type="button"
+                                className="auth-link-btn"
+                                onClick={() => {
+                                    setIsRegistering(false);
+                                    setErrorMessage("");
+                                }}
+                            >
+                                Already registered? Sign in
+                            </button>
+                        </form>
+                    ) : (
+                        <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '20px' }}>
+                            <FocusableInput
+                                type="text"
+                                placeholder="NUS Matric ID"
+                                value={matricId}
+                                onChange={(e) => setMatricId(e.target.value)}
+                                required
+                            />
+                            <FocusableInput
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button type="submit" className="login-btn">Next</button>
+                            <button
+                                type="button"
+                                className="auth-link-btn"
+                                onClick={() => {
+                                    setIsRegistering(true);
+                                    setErrorMessage("");
+                                }}
+                            >
+                                New? Register here
+                            </button>
+                        </form>
+                    )}
                 </div>
                 <style>{`
                     @keyframes authStepIn {
