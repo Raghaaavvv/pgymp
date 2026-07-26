@@ -9,11 +9,11 @@ public class UserEquipmentUsage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Connects this row to users.id in the users table.
+
     @Column(nullable = false)
     private Long userId;
 
-    // Connects this row to equipment.id in the equipment table.
+
     @Column(nullable = false)
     private Long equipmentId;
 

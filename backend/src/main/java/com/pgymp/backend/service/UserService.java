@@ -70,8 +70,7 @@ public class UserService {
         return login(matricId, password);
     }
 
-    // NEW - called by the security guard scanner page.
-    // This is the moment checkedIn actually becomes true.
+
     public ScanResponse scan(String token) {
         if (token == null || token.isBlank()) {
             return new ScanResponse(false, "No token provided");
@@ -99,7 +98,7 @@ public class UserService {
             return new CheckOutResponse(false, "User already checked out.", null);
         }
         user.setCheckedIn(false);
-        user.setToken(null); // clear token so they must log in fresh next time
+        user.setToken(null);
         userRepository.save(user);
 
         equipmentService.checkOutEquipment(userId);
@@ -110,9 +109,6 @@ public class UserService {
 
             if (nextUserOpt.isPresent()) {
                 User nextUser = nextUserOpt.get();
-                // Auto-promoted from queue: checked in directly without a
-                // separate scan step, since this happens as a background
-                // event rather than the resident physically walking up.
                 nextUser.setCheckedIn(true);
                 nextUser.setToken(UUID.randomUUID().toString());
                 userRepository.save(nextUser);
@@ -123,7 +119,7 @@ public class UserService {
         return new CheckOutResponse(true, "Checked Out successful", userId);
     }
 
-    // Polled by the resident's frontend every 10s while waiting in queue
+
     public QueueStatusResponse getQueueStatus(String matricId) {
         Optional<User> userOpt = userRepository.findByMatricId(matricId);
         if (userOpt.isEmpty()) {

@@ -38,7 +38,7 @@ public class Qservice {
         return myQueue.remove();
     }
 
-    // NEW - removes a specific person from anywhere in the queue
+
     public boolean leaveQueue(String matricID) {
         return myQueue.remove(matricID);
     }

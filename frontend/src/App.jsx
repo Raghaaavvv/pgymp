@@ -72,8 +72,6 @@ function App() {
               throw new Error(`Capacity request failed: ${response.status}`);
           }
           const data = await response.json();
-          // Backend normally sends { currentCount: 12 }. If it ever sends just 12,
-          // this still keeps the frontend display working.
           const nextCapacity = typeof data === "number" ? data : data.currentCount;
           setCurrentCapacity(Number(nextCapacity));
           }
@@ -90,7 +88,6 @@ function App() {
             }
             const data = await response.json();
             if (Array.isArray(data)) {
-                // Backend sends counts; frontend adds the local image asset for display.
                 setEquipmentData(data.map(item => ({
                     ...item,
                     image: equipmentImages[item.name]
@@ -227,7 +224,6 @@ function App() {
                     </div>
 
                     <div className="login-container">
-                        {/* if statement of jsx*/}
                         {authStep < 4 || authStep === 5 ? (
                             <AuthFlow
                                 authStep={authStep}

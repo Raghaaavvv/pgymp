@@ -35,7 +35,7 @@ function Header({ setCurrentPage }) {
                 position: 'relative',
                 padding: '0 16px',
             }}>
-                {/* Hamburger button - visible on mobile only */}
+                {/* visible on mobile only */}
                 <button
                     className="hamburger-btn"
                     onClick={() => setMenuOpen(!menuOpen)}
@@ -58,7 +58,7 @@ function Header({ setCurrentPage }) {
                 </h1>
             </div>
 
-            {/* Desktop nav - horizontal row, hidden on mobile */}
+            {/* Desktop nav, hidden on mobile */}
             <nav className="desktop-nav">
                 <ul style={{
                     display: 'flex',
@@ -82,7 +82,7 @@ function Header({ setCurrentPage }) {
                 </ul>
             </nav>
 
-            {/* Mobile dropdown nav - only rendered in the DOM while open */}
+            {/* Mobile dropdown nav */}
             {menuOpen && (
                 <nav className="mobile-nav">
                     <ul className="mobile-nav-list">
@@ -232,6 +232,6 @@ function Header({ setCurrentPage }) {
     );
 }
 
-/* add href for diff buttons */
+
 
 export default Header;

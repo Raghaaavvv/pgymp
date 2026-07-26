@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-//THE CONTROLLER IS THE MIDDLEMAN BETWEEN FRONTEND AND BACKEND. it messgaes the frotnend
 
-@RestController          // Tells Spring this handles HTTP requests
-@RequestMapping("/api/auth")  // Base URL for all endpoints in this controller
-@CrossOrigin(origins = "*")  // Allows React to call this
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -50,19 +50,19 @@ public class AuthController {
 
     @GetMapping("/equipment")
     public List<EquipmentToReact> getEquipment() {
-        //for frontend to display stuff
+
         return equipmentService.getEquipment();
     }
 
     @PostMapping("/equipment/checkIn")
     public List<EquipmentToReact> checkInEquipment(@RequestBody EquipmentCheckInRequest request) {
-        //from the frontend to update the database and backend
+
         return equipmentService.checkInEquipment(request.getUserId(), request.getEquipmentNames());
     }
 
     @GetMapping("/equipment/user/{userId}")
     public List<EquipmentToReact> getEquipmentByUser(@PathVariable Long userId) {
-        // Lets the frontend ask what equipment a specific user is currently using.
+
         return equipmentService.getEquipmentByUser(userId);
     }
 

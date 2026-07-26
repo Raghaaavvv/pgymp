@@ -72,7 +72,7 @@ public class User {
         return this.id;
     }
 
-    // NEW
+
     public String getToken() {
         return this.token;
     }

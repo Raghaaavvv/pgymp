@@ -72,8 +72,7 @@ const MUSCLE_DATA = {
 const SKIN = '#e4d6d2';
 const SKIN_STROKE = '#b8a49c';
 
-// Non-interactive joint circles drawn underneath, purely to smooth the
-// visual seams between torso/limb pieces.
+
 const JOINTS = [
     { cx: 90, cy: 58, r: 9 },   // left shoulder
     { cx: 150, cy: 58, r: 9 },  // right shoulder
@@ -85,9 +84,7 @@ const JOINTS = [
     { cx: 130, cy: 259, r: 8 }, // right knee
 ];
 
-// Each body part is ONE shape used both as the visible silhouette piece
-// and as the hover/click target -- so the highlight can never drift from
-// the outline, since it IS the outline.
+
 const FRONT_PARTS = [
     { id: 'chest', d: 'M98,50 L142,50 L138,94 L102,94 Z' },
     { id: 'abs', d: 'M102,96 L138,96 L132,148 L108,148 Z' },

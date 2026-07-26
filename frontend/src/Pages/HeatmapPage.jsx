@@ -5,8 +5,8 @@ const OPEN_HOUR = 7;
 const CLOSE_HOUR = 23;
 const MAX_CAPACITY = 30;
 
-// Hardcoded data for now - format matches what backend will eventually return.
-// Hours represent the start of a 2-hour block, covering 7am to 11pm.
+// Hardcoded data for now
+
 const heatmapData = [
     { day: "Mon", hour: 7,  count: 2  }, { day: "Mon", hour: 9,  count: 5  }, { day: "Mon", hour: 11, count: 3  }, { day: "Mon", hour: 13, count: 8  }, { day: "Mon", hour: 15, count: 6  }, { day: "Mon", hour: 17, count: 12 }, { day: "Mon", hour: 19, count: 22 }, { day: "Mon", hour: 21, count: 15 },
     { day: "Tue", hour: 7,  count: 1  }, { day: "Tue", hour: 9,  count: 4  }, { day: "Tue", hour: 11, count: 2  }, { day: "Tue", hour: 13, count: 7  }, { day: "Tue", hour: 15, count: 5  }, { day: "Tue", hour: 17, count: 10 }, { day: "Tue", hour: 19, count: 19 }, { day: "Tue", hour: 21, count: 14 },
@@ -122,6 +122,7 @@ function HeatmapPage({ setCurrentPage }) {
                                             type="button"
                                             className={`heatmap-cell${isSelected ? ' heatmap-cell-selected' : ''}`}
                                             style={{ backgroundColor: getColor(percent) }}
+                                            onClick={() => setSelectedCell({ day, hour, count: cell.count })}
                                             onMouseEnter={() => setSelectedCell({ day, hour, count: cell.count })}
                                             onFocus={() => setSelectedCell({ day, hour, count: cell.count })}
                                             aria-label={`${day} ${formatRange(hour)}: ${percent}% full`}
@@ -265,6 +266,8 @@ function HeatmapPage({ setCurrentPage }) {
                     display: block;
                     width: 100%;
                     transition: border-color 0.15s ease, filter 0.15s ease;
+                    -webkit-tap-highlight-color: transparent;
+                    touch-action: manipulation;
                 }
                 .heatmap-cell:hover,
                 .heatmap-cell:focus-visible {
