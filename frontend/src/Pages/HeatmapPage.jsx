@@ -5,6 +5,15 @@ const OPEN_HOUR = 7;
 const CLOSE_HOUR = 23;
 const MAX_CAPACITY = 30;
 
+// once we get data
+// const [heatmapData, setHeatmapData] = useState([]);
+//
+// useEffect(() => {
+//     fetch(`${API_BASE_URL}/api/auth/heatmap`)
+//         .then(res => res.json())
+//         .then(data => setHeatmapData(data));
+// }, []);
+
 // Hardcoded data for now
 
 const heatmapData = [
@@ -16,6 +25,8 @@ const heatmapData = [
     { day: "Sat", hour: 7,  count: 1  }, { day: "Sat", hour: 9,  count: 3  }, { day: "Sat", hour: 11, count: 9  }, { day: "Sat", hour: 13, count: 15 }, { day: "Sat", hour: 15, count: 13 }, { day: "Sat", hour: 17, count: 10 }, { day: "Sat", hour: 19, count: 12 }, { day: "Sat", hour: 21, count: 8  },
     { day: "Sun", hour: 7,  count: 1  }, { day: "Sun", hour: 9,  count: 2  }, { day: "Sun", hour: 11, count: 7  }, { day: "Sun", hour: 13, count: 12 }, { day: "Sun", hour: 15, count: 11 }, { day: "Sun", hour: 17, count: 9  }, { day: "Sun", hour: 19, count: 10 }, { day: "Sun", hour: 21, count: 6  },
 ];
+
+
 
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const hours = [];

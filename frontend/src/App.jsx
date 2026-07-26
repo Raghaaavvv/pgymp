@@ -48,10 +48,10 @@ function App() {
 
   const [token, setToken] = useState(savedSession.token || null);
   const qrCodeData = token ? token : "";
-  const [authStep, setAuthStep] = useState(savedSession.authStep || 1);
+  const [authStep, setAuthStep] = useState(savedSession.authStep || 5);
   const [userId, setUserId] = useState(savedSession.userId || null);
   const [currentCapacity, setCurrentCapacity] = useState(2);
-  const maxCapacity = 20;
+  const maxCapacity = 2;
   const [currentPage, setCurrentPage] = useState("home");
   const [equipmentData, setEquipmentData] = useState([
       {"name": "Benches", "total": 2, "inUse": 1, "image": benchImg},
