@@ -38,10 +38,10 @@ public class UserService {
         if (user.isCheckedIn()) {
             return new LoginResponse(false, "User already checked in", null, null);
         }
-        // User already has a pending token (logged in earlier, hasn't scanned yet).
-        // Let them resume with the same token instead of erroring out.
         if (user.getToken() != null) {
-            return new LoginResponse(true, "Welcome back - scan your QR code at the gym entrance", user.getId(), user.getToken());
+            user.setCheckedIn(true);
+            userRepository.save(user);
+            return new LoginResponse(true, "Welcome back", user.getId(), user.getToken());
         }
         if (capacityService.getCurrentCount() >= MAX_CAPACITY) {
             int queuePosition = qService.joinQ(user.getMatricId());
@@ -50,10 +50,9 @@ public class UserService {
 
         String token = UUID.randomUUID().toString();
         user.setToken(token);
+        user.setCheckedIn(true);
         userRepository.save(user);
 
-        // Note: checkedIn is NOT set here. It only becomes true once the
-        // security guard scans this token via scan().
         return new LoginResponse(true, "Login successful", user.getId(), token);
     }
 
@@ -83,7 +82,7 @@ public class UserService {
         }
         User user = userOpt.get();
         if (user.isCheckedIn()) {
-            return new ScanResponse(false, "User already checked in");
+            return new ScanResponse(true, "User already checked in: " + user.getMatricId());
         }
         user.setCheckedIn(true);
         userRepository.save(user);

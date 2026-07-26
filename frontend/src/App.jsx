@@ -21,6 +21,17 @@ import ScannerPage from './Pages/ScannerPage'
 import HeatmapPage from './Pages/HeatmapPage'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const SESSION_STORAGE_KEY = "pgympSession";
+
+const getSavedSession = () => {
+  try {
+    const savedSession = localStorage.getItem(SESSION_STORAGE_KEY);
+    return savedSession ? JSON.parse(savedSession) : {};
+  } catch (error) {
+    console.error("Could not load saved session", error);
+    return {};
+  }
+};
 
 const equipmentImages = {
   "Benches": benchImg,
@@ -33,11 +44,12 @@ const equipmentImages = {
 };
 
 function App() {
+  const savedSession = getSavedSession();
 
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(savedSession.token || null);
   const qrCodeData = token ? token : "";
-  const [authStep, setAuthStep] = useState(1);
-  const [userId, setUserId] = useState(null);
+  const [authStep, setAuthStep] = useState(savedSession.authStep || 1);
+  const [userId, setUserId] = useState(savedSession.userId || null);
   const [currentCapacity, setCurrentCapacity] = useState(2);
   const maxCapacity = 20;
   const [currentPage, setCurrentPage] = useState("home");
@@ -97,8 +109,27 @@ function App() {
       return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+      if (!userId || !token || authStep < 2) {
+          localStorage.removeItem(SESSION_STORAGE_KEY);
+          return;
+      }
+
+      localStorage.setItem(
+          SESSION_STORAGE_KEY,
+          JSON.stringify({ userId, token, authStep })
+      );
+  }, [userId, token, authStep]);
+
   const handleCheckout = async () => {
         try {
+            if (!userId) {
+                localStorage.removeItem(SESSION_STORAGE_KEY);
+                setToken(null);
+                setAuthStep(1);
+                return;
+            }
+
             const response = await fetch(`${API_BASE_URL}/api/auth/checkOut`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -108,7 +139,9 @@ function App() {
             const data = await response.json();
             if (data.status) {
                 setUserId(null);
+                setToken(null);
                 setAuthStep(1);
+                localStorage.removeItem(SESSION_STORAGE_KEY);
                 fetchCapacity();
                 fetchEquipment();
                 } else {
