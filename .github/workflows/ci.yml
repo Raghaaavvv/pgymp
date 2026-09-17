@@ -10,6 +10,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: soma
+          POSTGRES_PASSWORD: orbital26
+          POSTGRES_DB: pgymp_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,3 +39,7 @@ jobs:
       - name: Run tests with Maven
         working-directory: ./backend
         run: mvn test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/pgymp_db
+          SPRING_DATASOURCE_USERNAME: soma
+          SPRING_DATASOURCE_PASSWORD: orbital26
